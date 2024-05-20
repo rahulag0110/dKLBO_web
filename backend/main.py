@@ -18,6 +18,8 @@ app.add_middleware(
 )
 
 # Global variables to store the return values of the functions
+class NumStart(BaseModel):
+    num_start: int
 
 class Rating(BaseModel):
     vote: int
@@ -52,7 +54,7 @@ async def read_root():
     return {"Server Running"}
 
 @app.post("/set_num_start/")
-async def set_num_start(num_start: int):
+async def set_num_start(num_start: NumStart):
     global parameters_state
     parameters_state["num_start"] = num_start
     return {"status": "num_start set successfully"}
