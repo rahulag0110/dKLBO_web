@@ -91,12 +91,12 @@ def initial_eval_loop_plot(initial_eval_loop_counter, train_indices, points_meas
 
 def initial_eval_vote_process(vote, newspec_pref, newspec_wt, wcount_good, target_func, new_spec_y, pref, m, initial_eval_loop_counter):
     
-    vote = vote
+    newspec_wt_by_usr = newspec_wt/10
     if vote > 0:
         newspec_wt = 1
         if wcount_good > 0:
             if newspec_pref == 1:
-                newspec_wt = newspec_wt
+                newspec_wt = newspec_wt_by_usr
             else:
                 newspec_wt = 0.5
         wcount_good = wcount_good + vote

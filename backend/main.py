@@ -138,7 +138,7 @@ async def initial_eval_loop_endpoint():
     parameters_state["plot_history"].append(plot_history_item)
     
     
-    return {"status": "initial_eval_loop success", "plot_data": plot_data, "current_wcount_good": parameters_state["wcount_good"], "plot_history": parameters_state["plot_history"]}
+    return {"status": "initial_eval_loop success", "plot_data": plot_data, "current_wcount_good": parameters_state["wcount_good"], "plot_history": parameters_state["plot_history"], "num_start": parameters_state["num_start"]}
 
 @app.post("/initial_eval_vote_process/")
 async def initial_eval_vote_process_endpoint(rating: Rating):
