@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const NumStartInput = () => {
+const NumStartInput = ({ onNumStartSet }) => {
   const [numStart, setNumStart] = useState('');
+  const [isSet, setIsSet] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -11,10 +12,14 @@ const NumStartInput = () => {
       const response = await axios.post('http://localhost:8000/set_num_start/', { num_start: parseInt(numStart) });
       console.log(response.data);
       alert('Num start set successfully');
+      setIsSet(true);
+      onNumStartSet();
     } catch (error) {
       console.error('Error setting num start:', error);
     }
   };
+
+  if (isSet) return null;
 
   return (
     <form onSubmit={handleSubmit}>
