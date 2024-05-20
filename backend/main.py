@@ -92,21 +92,6 @@ async def process_file(file: UploadFile = File(...)):
     # print(preprocess_return)
     return {"status": "file upload success", "num_start": parameters_state["num_start"]}
     
-
-# @app.post("/initial_eval/")
-# async def initial_eval_endpoint():
-
-#     amp_masked = parameters_srate["amp_masked"]
-#     idx = parameters_srate["idx"]
-#     vdc_vec = parameters_srate["vdc_vec"]
-#     num_start = parameters_srate["num_start"]
-#     img = parameters_srate["img"]
-#     spec_length = parameters_srate["spec_length"]
-    
-#     initial_eval_return = initial_eval(amp_masked, idx, vdc_vec, num_start, img, spec_length)
-    
-#     return {"status": "initial_eval success"}
-
 @app.post("/initial_eval_loop_plot/")
 async def initial_eval_loop_endpoint():
     global parameters_state
@@ -140,7 +125,7 @@ async def initial_eval_loop_endpoint():
     parameters_state["new_spec_y"] = initial_eval_loop_return["new_spec_y"]
     plot_data = initial_eval_loop_return["plot_data"]
     
-    return {"status": "initial_eval_loop success", "plot_data": plot_data}
+    return {"status": "initial_eval_loop success", "plot_data": plot_data, "current_wcount_good": parameters_state["wcount_good"]}
 
 @app.post("/initial_eval_vote_process/")
 async def initial_eval_vote_process_endpoint(rating: Rating):
