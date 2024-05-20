@@ -2,7 +2,7 @@ import numpy as np
 import atomai as aoi
 from atomai import utils
 
-def preprocess(data):
+def preprocess(data, num_start):
     # Extract BEPS data
     beps_all = data['results_beps']
     
@@ -41,7 +41,6 @@ def preprocess(data):
     features, targets = norm_(features), norm_(targets)
     
     n, d1, d2 = features.shape
-    num_start = int(10)
     N = int(100)
     m = 0
     spec_length = amp_mat.shape[-1]  #spectral data length

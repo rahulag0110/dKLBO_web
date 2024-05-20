@@ -48,46 +48,6 @@ def generate_plots_for_initial_eval(idx_x, idx_y, new_spec_x, new_spec_y, img, w
     
     return plot_data
     
-
-def initial_eval(amp_masked, idx, vdc_vec, num_start, img, spec_length):
-    #parameters_needed = amp_masked, idx, vdc_vec, num_start, img, spec_length
-    # set parameters
-    IV = np.copy(amp_masked)
-    points_measured = np.array(idx)
-    last_points_measured = np.array(points_measured)
-    vdc = vdc_vec
-    
-    train_Y = np.zeros((num_start, 1))
-    pref = np.zeros((num_start, 1))
-    init_spec = np.zeros((num_start, spec_length))
-    # Define a sparse grid to store evaluated spectral locations
-    eval_spec_y = np.zeros((img.shape[0],img.shape[0],spec_length))
-    #Evaluate initial training data
-    x = np.zeros((1,2))
-    
-    # First generate target loop, based on initial training data
-    wcount_good= 0
-    target_func = np.zeros(spec_length)
-    
-    mask = np.isin(points_measured, last_points_measured, invert = True)
-    new_points_measured = points_measured[mask]
-    last_points_measured = np.append(last_points_measured, new_points_measured)
-    
-    return {
-        "IV": IV,
-        "points_measured": points_measured,
-        "last_points_measured": last_points_measured,
-        # "vdc": vdc,
-        # "train_Y": train_Y,
-        "pref": pref,
-        "init_spec": init_spec,
-        "eval_spec_y": eval_spec_y,
-        # "x": x,
-        "wcount_good": wcount_good,
-        "target_func": target_func,
-        # "new_points_measured": new_points_measured
-        }
-
 def initial_eval_loop_plot(initial_eval_loop_counter, train_indices, points_measured, last_points_measured, IV, vdc_vec, init_spec, eval_spec_y, m, img, wcount_good, target_func):
     #parameters_needed = loop_counter, trian_indices, points_measured, last_points_measured, IV, ved_vec, init_spec, eval_spec_y, m, pref, img, wcount_good, target_func
     idx_x = int(train_indices[initial_eval_loop_counter, 0])
@@ -131,6 +91,7 @@ def initial_eval_loop_plot(initial_eval_loop_counter, train_indices, points_meas
 
 def initial_eval_vote_process(vote, newspec_pref, newspec_wt, wcount_good, target_func, new_spec_y, pref, m, initial_eval_loop_counter):
     
+    vote = vote
     if vote > 0:
         newspec_wt = 1
         if wcount_good > 0:
@@ -146,6 +107,9 @@ def initial_eval_vote_process(vote, newspec_pref, newspec_wt, wcount_good, targe
     initial_eval_loop_counter += 1
     
     return {
+        "vote": vote,
+        "newspec_pref": newspec_pref,
+        "newspec_wt": newspec_wt,
         "pref": pref,
         "m": m,
         "initial_eval_loop_counter": initial_eval_loop_counter,

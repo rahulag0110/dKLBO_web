@@ -5,7 +5,7 @@ from pydantic import BaseModel
 import pickle
 
 from dKLBO_functions.preprocess import preprocess
-from dKLBO_functions.initial_eval import initial_eval, initial_eval_loop_plot, initial_eval_vote_process
+from dKLBO_functions.initial_eval import initial_eval_loop_plot, initial_eval_vote_process
 
 app = FastAPI()
 
@@ -43,12 +43,19 @@ parameters_state = {
     "pref": None,
     "wcount_good": None,
     "target_func": None,
-    "initial_eval_loop_counter": None
+    "initial_eval_loop_counter": None,
+    "plot_history": []
 }
 
 @app.get("/")
 async def read_root():
     return {"Server Running"}
+
+@app.post("/set_num_start/")
+async def set_num_start(num_start: int):
+    global parameters_state
+    parameters_state["num_start"] = num_start
+    return {"status": "num_start set successfully"}
 
 @app.post("/upload/")
 async def process_file(file: UploadFile = File(...)):
@@ -69,8 +76,9 @@ async def process_file(file: UploadFile = File(...)):
     import os
     os.remove("temp_large_file.p")
     
-    print("File uploaded successfully")    
-    preprocess_return = preprocess(uploaded_file)
+    print("File uploaded successfully")  
+    num_start = parameters_state["num_start"]  
+    preprocess_return = preprocess(uploaded_file, num_start)
     parameters_state["spec_length"] = preprocess_return["spec_length"]
     parameters_state["idx"] = preprocess_return["idx"]
     parameters_state["vdc_vec"] = preprocess_return["vdc_vec"]
@@ -124,8 +132,11 @@ async def initial_eval_loop_endpoint():
     parameters_state["target_func"] = initial_eval_loop_return["target_func"]
     parameters_state["new_spec_y"] = initial_eval_loop_return["new_spec_y"]
     plot_data = initial_eval_loop_return["plot_data"]
+    plot_history_item = {"plot_data": plot_data, "rating": None}
+    parameters_state["plot_history"].append(plot_history_item)
     
-    return {"status": "initial_eval_loop success", "plot_data": plot_data, "current_wcount_good": parameters_state["wcount_good"]}
+    
+    return {"status": "initial_eval_loop success", "plot_data": plot_data, "current_wcount_good": parameters_state["wcount_good"], "plot_history": parameters_state["plot_history"]}
 
 @app.post("/initial_eval_vote_process/")
 async def initial_eval_vote_process_endpoint(rating: Rating):
@@ -148,5 +159,8 @@ async def initial_eval_vote_process_endpoint(rating: Rating):
     parameters_state["initial_eval_loop_counter"] = initial_eval_vote_process_return["initial_eval_loop_counter"]
     parameters_state["wcount_good"] = initial_eval_vote_process_return["wcount_good"]
     parameters_state["target_func"] = initial_eval_vote_process_return["target_func"]
+    
+    rating = {"vote": initial_eval_vote_process_return["vote"], "newspec_pref": initial_eval_vote_process_return["newspec_pref"], "newspec_wt": initial_eval_vote_process_return["newspec_wt"]}
+    parameters_state["plot_history"][-1]["rating"] = rating
     
     return {"status": "initial_eval_vote_process success", "initial_eval_loop_counter": parameters_state["initial_eval_loop_counter"]}
