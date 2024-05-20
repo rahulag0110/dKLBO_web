@@ -1,4 +1,3 @@
-// src/FileUpload.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import Spinner from './Spinner';
@@ -20,17 +19,19 @@ const FileUpload = () => {
     formData.append('file', file);
 
     try {
+      console.log('Uploading file with data:', formData);
       const response = await axios.post('http://localhost:8000/upload/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
+      console.log('Response:', response);
 
       setMessage(response.data.status);
       setShowEvaluation(true);
     } catch (error) {
+      console.error('File upload failed:', error);
       setMessage('File upload failed');
-      console.error('There was an error uploading the file!', error);
     } finally {
       setLoading(false);
     }

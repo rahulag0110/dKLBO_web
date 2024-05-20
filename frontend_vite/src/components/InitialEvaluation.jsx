@@ -1,4 +1,3 @@
-// src/InitialEvaluation.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import Plot from './Plot';
@@ -12,26 +11,33 @@ const InitialEvaluation = ({ onEvaluationComplete }) => {
 
   const handleInitialEvaluation = async () => {
     try {
+      console.log('Calling /initial_eval_loop_plot/ endpoint');
       const response = await axios.post('http://localhost:8000/initial_eval_loop_plot/');
+      console.log('Response:', response);
+
       setPlotData(response.data.plot_data.plot);
       setCurrentWcountGood(response.data.current_wcount_good);
       setVoteCount(0);
       setPlotHistory([]);
       setMessage('');
     } catch (error) {
-      console.error('There was an error starting the initial evaluation!', error);
+      console.error('Error starting initial evaluation:', error);
     }
   };
 
   const handleVoteSubmit = async (rating) => {
     try {
+      console.log('Submitting vote with data:', rating);
       const response = await axios.post('http://localhost:8000/initial_eval_vote_process/', rating);
+      console.log('Response:', response);
+
       setVoteCount((prevCount) => prevCount + 1);
       setPlotHistory((prevHistory) => [...prevHistory, { plotData, rating }]);
 
       if (voteCount < 9) {
         // Get the next plot data
         const newResponse = await axios.post('http://localhost:8000/initial_eval_loop_plot/');
+        console.log('Response:', newResponse);
         setPlotData(newResponse.data.plot_data.plot);
         setCurrentWcountGood(newResponse.data.current_wcount_good);
       } else {
@@ -39,7 +45,7 @@ const InitialEvaluation = ({ onEvaluationComplete }) => {
         onEvaluationComplete();
       }
     } catch (error) {
-      console.error('There was an error processing the vote!', error);
+      console.error('Error processing vote:', error);
     }
   };
 
