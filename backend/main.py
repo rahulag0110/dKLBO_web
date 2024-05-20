@@ -56,7 +56,7 @@ async def read_root():
 @app.post("/set_num_start/")
 async def set_num_start(num_start: NumStart):
     global parameters_state
-    parameters_state["num_start"] = num_start
+    parameters_state["num_start"] = num_start.num_start
     return {"status": "num_start set successfully"}
 
 @app.post("/upload/")
