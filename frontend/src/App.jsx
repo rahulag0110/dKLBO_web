@@ -16,6 +16,7 @@ const App = () => {
   const [plotHistory, setPlotHistory] = useState([]);
   const [currentIteration, setCurrentIteration] = useState(0);
   const [numStart, setNumStart] = useState(0);
+  const [initialEvalStarted, setInitialEvalStarted] = useState(false);
 
   const handleNumStartSet = () => {
     setNumStartSet(true);
@@ -33,6 +34,7 @@ const App = () => {
       setPlotHistory(response.data.plot_history);
       setCurrentIteration(1);
       setNumStart(response.data.num_start); // Assuming the backend can return num_start
+      setInitialEvalStarted(true);
     } catch (error) {
       console.error('Error fetching initial plot:', error);
     }
@@ -62,10 +64,10 @@ const App = () => {
       {currentPlot && (
         <div>
           <PlotDisplay plotData={currentPlot} />
-          <VoteInput onVoteSubmit={handleVoteSubmit} />
+          <VoteInput onVoteSubmit={handleVoteSubmit} currentWcountGood={currentWcountGood} />
         </div>
       )}
-      {preprocessingDone && <PreviousPlots plotHistory={plotHistory} />}
+      {initialEvalStarted && <PreviousPlots plotHistory={plotHistory} />}
     </div>
   );
 };
