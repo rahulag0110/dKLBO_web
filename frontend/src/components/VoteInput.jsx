@@ -1,5 +1,5 @@
 // src/components/VoteInput.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const VoteInput = ({ onVoteSubmit, currentWcountGood }) => {
   const [vote, setVote] = useState(0);
@@ -7,6 +7,14 @@ const VoteInput = ({ onVoteSubmit, currentWcountGood }) => {
   const [newspecPref, setNewspecPref] = useState(-1);
   const [newspecWt, setNewspecWt] = useState(0);
   const [showWeightOption, setShowWeightOption] = useState(false);
+
+  useEffect(() => {
+    setVote(0);
+    setShowPrefOption(false);
+    setNewspecPref(-1);
+    setNewspecWt(0);
+    setShowWeightOption(false);
+  }, [currentWcountGood, onVoteSubmit]);
 
   const handleVoteChange = (event) => {
     const value = parseInt(event.target.value);
