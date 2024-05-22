@@ -4,14 +4,14 @@ import React, { useState, useEffect } from 'react';
 const VoteInput = ({ onVoteSubmit, currentWcountGood }) => {
   const [vote, setVote] = useState(0);
   const [showPrefOption, setShowPrefOption] = useState(false);
-  const [newspecPref, setNewspecPref] = useState(-1);
+  const [newspecPref, setNewspecPref] = useState(0);
   const [newspecWt, setNewspecWt] = useState(0);
   const [showWeightOption, setShowWeightOption] = useState(false);
 
   useEffect(() => {
     setVote(0);
     setShowPrefOption(false);
-    setNewspecPref(-1);
+    setNewspecPref(0);
     setNewspecWt(0);
     setShowWeightOption(false);
   }, [currentWcountGood, onVoteSubmit]);
