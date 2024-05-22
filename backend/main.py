@@ -165,4 +165,4 @@ async def initial_eval_vote_process_endpoint(rating: Rating):
     rating = {"vote": initial_eval_vote_process_return["vote"], "newspec_pref": initial_eval_vote_process_return["newspec_pref"], "newspec_wt": initial_eval_vote_process_return["newspec_wt"]}
     parameters_state["plot_history"][-1]["rating"] = rating
     
-    return {"status": "initial_eval_vote_process success", "initial_eval_loop_counter": parameters_state["initial_eval_loop_counter"]}
+    return {"status": "initial_eval_vote_process success", "initial_eval_loop_counter": parameters_state["initial_eval_loop_counter"], "plot_history": parameters_state["plot_history"], "num_start": parameters_state["num_start"]}
