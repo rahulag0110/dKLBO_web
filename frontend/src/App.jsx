@@ -1,11 +1,12 @@
 // src/App.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import NumStartInput from './components/NumStartInput';
 import FileUpload from './components/FileUpload';
 import EvaluationButton from './components/EvaluationButton';
 import PlotDisplay from './components/PlotDisplay';
 import VoteInput from './components/VoteInput';
 import PreviousPlots from './components/PreviousPlots';
+import VotesPage from './components/VotesPage';
 import axios from 'axios';
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
   const [currentIteration, setCurrentIteration] = useState(0);
   const [numStart, setNumStart] = useState(0);
   const [initialEvalStarted, setInitialEvalStarted] = useState(false);
+  const [votingComplete, setVotingComplete] = useState(false);
 
   const handleNumStartSet = () => {
     setNumStartSet(true);
@@ -44,7 +46,10 @@ const App = () => {
     try {
       const response = await axios.post('http://localhost:8000/initial_eval_vote_process/', voteData);
       setCurrentIteration((prev) => prev + 1);
-      if (currentIteration < numStart) {
+      setPlotHistory(response.data.plot_history);
+      if (currentIteration >= numStart - 1) {
+        setVotingComplete(true);
+      } else {
         const nextResponse = await axios.post('http://localhost:8000/initial_eval_loop_plot/');
         setCurrentPlot(nextResponse.data.plot_data);
         setCurrentWcountGood(nextResponse.data.current_wcount_good);
@@ -54,6 +59,10 @@ const App = () => {
       console.error('Error submitting vote:', error);
     }
   };
+
+  if (votingComplete) {
+    return <VotesPage plotHistory={plotHistory} />;
+  }
 
   return (
     <div>
