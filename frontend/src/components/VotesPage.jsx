@@ -10,7 +10,7 @@ const VotesPage = ({ plotHistory }) => {
       <h1>Your Votes</h1>
       {history.map((item, index) => (
         <div key={index}>
-          <img src={`data:image/png;base64,${item.plot_data.plot}`} alt={`Plot ${index}`} />
+          <img src={`data:image/png;base64,${item.plot_data.plot}`} alt={`Plot ${index}`} style={{ width: '1000px' }}/>
           <p>Vote: {item.rating?.vote ?? 'N/A'}</p>
           <p>Weight Pref: {item.rating?.newspec_pref ?? 'N/A'}</p>
           <p>Weight: {item.rating?.newspec_wt ?? 'N/A'}</p>
