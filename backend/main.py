@@ -5,13 +5,13 @@ from pydantic import BaseModel
 import pickle
 
 from dKLBO_functions.preprocess import preprocess
-from dKLBO_functions.initial_eval import initial_eval_loop_plot, initial_eval_vote_process
+from dKLBO_functions.initial_eval import initial_eval_loop_plot, initial_eval_vote_process, initial_eval_finish
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000","http://localhost:5173"],  # Allow frontend URL
+    allow_origins=["*"],  # Allow frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -41,7 +41,13 @@ parameters_state = {
     "init_spec": None,
     "eval_spec_y": None,
     "img" : None,
+    "X_feas": None,
+    "X_feas_norm": None,
+    "train_X": None,
+    "train_X_norm": None,
+    "new_spec_x": None,
     "new_spec_y": None,
+    "train_Y": None,
     "pref": None,
     "wcount_good": None,
     "target_func": None,
@@ -86,6 +92,10 @@ async def process_file(file: UploadFile = File(...)):
     parameters_state["vdc_vec"] = preprocess_return["vdc_vec"]
     parameters_state["num_start"] = preprocess_return["num_start"]
     parameters_state["img"] = preprocess_return["img"]
+    parameters_state["X_feas"] = preprocess_return["X_feas"]
+    parameters_state["X_feas_norm"] = preprocess_return["X_feas_norm"]
+    parameters_state["train_X"] = preprocess_return["train_X"]
+    parameters_state["train_X_norm"] = preprocess_return["train_X_norm"]
     parameters_state["amp_masked"] = preprocess_return["amp_masked"]
     parameters_state["train_indices"] = preprocess_return["train_indices"]
     parameters_state["m"] = preprocess_return["m"]
@@ -94,13 +104,14 @@ async def process_file(file: UploadFile = File(...)):
     parameters_state["IV"] = preprocess_return["IV"]
     parameters_state["init_spec"] = preprocess_return["init_spec"]
     parameters_state["eval_spec_y"] = preprocess_return["eval_spec_y"]
+    parameters_state["train_Y"] = preprocess_return["train_Y"]
     parameters_state["pref"] = preprocess_return["pref"]
     parameters_state["wcount_good"] = preprocess_return["wcount_good"]
     parameters_state["target_func"] = preprocess_return["target_func"]
     parameters_state["initial_eval_loop_counter"] = preprocess_return["initial_eval_loop_counter"]
     
     # print(preprocess_return)
-    return {"status": "file upload success", "num_start": parameters_state["num_start"]}
+    return {"status": "file upload success", "num_start": parameters_state["num_start"], "initial_eval_loop_counter": parameters_state["initial_eval_loop_counter"]}
     
 @app.post("/initial_eval_loop_plot/")
 async def initial_eval_loop_endpoint():
@@ -132,13 +143,14 @@ async def initial_eval_loop_endpoint():
     parameters_state["img"] = initial_eval_loop_return["img"]
     parameters_state["wcount_good"] = initial_eval_loop_return["wcount_good"]
     parameters_state["target_func"] = initial_eval_loop_return["target_func"]
+    parameters_state["new_spec_x"] = initial_eval_loop_return["new_spec_x"]
     parameters_state["new_spec_y"] = initial_eval_loop_return["new_spec_y"]
     plot_data = initial_eval_loop_return["plot_data"]
     plot_history_item = {"plot_data": plot_data, "rating": None}
     parameters_state["plot_history"].append(plot_history_item)
     
     
-    return {"status": "initial_eval_loop success", "plot_data": plot_data, "current_wcount_good": parameters_state["wcount_good"], "plot_history": parameters_state["plot_history"], "num_start": parameters_state["num_start"]}
+    return {"status": "initial_eval_loop success", "plot_data": plot_data, "current_wcount_good": parameters_state["wcount_good"], "plot_history": parameters_state["plot_history"], "num_start": parameters_state["num_start"], "initial_eval_loop_counter": parameters_state["initial_eval_loop_counter"]}
 
 @app.post("/initial_eval_vote_process/")
 async def initial_eval_vote_process_endpoint(rating: Rating):
@@ -166,3 +178,37 @@ async def initial_eval_vote_process_endpoint(rating: Rating):
     parameters_state["plot_history"][-1]["rating"] = rating
     
     return {"status": "initial_eval_vote_process success", "initial_eval_loop_counter": parameters_state["initial_eval_loop_counter"], "plot_history": parameters_state["plot_history"], "num_start": parameters_state["num_start"]}
+
+@app.post("/initial_eval_finish/")
+async def initial_eval_finish_endpoint():
+    global parameters_state
+    
+    num_start = parameters_state["num_start"]
+    train_indices = parameters_state["train_indices"]
+    eval_spec_y = parameters_state["eval_spec_y"]
+    train_Y = parameters_state["train_Y"]
+    new_spec_x = parameters_state["new_spec_x"]
+    wcount_good = parameters_state["wcount_good"]
+    target_func = parameters_state["target_func"]
+    pref = parameters_state["pref"]
+    X_feas = parameters_state["X_feas"]
+    X_feas_norm = parameters_state["X_feas_norm"]
+    train_X = parameters_state["train_X"]
+    train_X_norm = parameters_state["train_X_norm"]
+    idx = parameters_state["idx"]
+    m = parameters_state["m"]
+    
+    initial_eval_finish_return = initial_eval_finish(num_start, train_indices, eval_spec_y, train_Y, new_spec_x, wcount_good, target_func, pref, X_feas, X_feas_norm, train_X, train_X_norm, idx, m)
+
+    parameters_state["train_Y"] = initial_eval_finish_return["train_Y"]
+    parameters_state["var_params"] = initial_eval_finish_return["var_params"]
+    parameters_state["test_X"] = initial_eval_finish_return["test_X"]
+    parameters_state["test_X_norm"] = initial_eval_finish_return["test_X_norm"]
+    parameters_state["train_X"] = initial_eval_finish_return["train_X"]
+    parameters_state["train_X_norm"] = initial_eval_finish_return["train_X_norm"]
+    parameters_state["idx"] = initial_eval_finish_return["idx"]
+    parameters_state["m"] = initial_eval_finish_return["m"]
+    
+    train_Y_str = initial_eval_finish_return["train_Y"].tolist()
+    
+    return {"status": "initial_eval_finish success", "train_Y": train_Y_str}

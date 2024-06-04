@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import base64
 import io
+from skimage.metrics import structural_similarity as ssim
 
 def return_new_measurement(full_dataset, points_measured):
     ampdat_masked = np.zeros_like(full_dataset)
@@ -86,6 +87,7 @@ def initial_eval_loop_plot(initial_eval_loop_counter, train_indices, points_meas
         "img": img,
         "wcount_good": wcount_good,
         "target_func": target_func,
+        "new_spec_x": new_spec_x,
         "new_spec_y": new_spec_y,
     }
 
@@ -115,4 +117,56 @@ def initial_eval_vote_process(vote, newspec_pref, newspec_wt, wcount_good, targe
         "initial_eval_loop_counter": initial_eval_loop_counter,
         "wcount_good": wcount_good,
         "target_func": target_func,
+    }
+
+def func_human_interacted_obj(idx_x, idx_y, new_spec_x, new_spec_y, wcount_good, target_func, vote):
+    idx1 = int(idx_x)
+    idx2 = int(idx_y)
+    rf = 1
+    #print(wcount_good)
+    if (wcount_good == 0): #We dont find a good loop yet from all initial sampling and thus target is unknown
+        ssim_spec = np.random.rand(1)*(1) # Unif[0, 1] A sufficiently large value as we want to avoid selecting bad loops,
+        # When we have a target, we will recalculate again to get more accuract estimate
+        R = vote*rf
+
+    else:
+        #Calculate dissimilarity (mse) between target and ith loop shape
+
+        pred = new_spec_y
+        target = target_func
+        ssim_spec = ssim(target, pred, data_range=pred.max() - pred.min())
+        #plt.plot(new_spec_x, new_spec_y)
+        #plt.show()
+        #dev2_spectral = (target_func-new_spec_y)**2
+        #mse_spectral = torch.mean(dev2_spectral)
+        #Calculate reward as per voting, this will minimize the risk of similar function values of good and bad loop shape with similar mse
+        R = vote*rf
+
+    #This is the basic setting of obj func-- we can incorporate more info as per domain knowledge to improve
+    #Into maximization problem
+    obj = R + ssim_spec #Maximize reward and ssim
+    #print(mse_spectral)
+    return obj
+
+def initial_eval_finish(num_start, train_indices, eval_spec_y, train_Y, new_spec_x, wcount_good, target_func, pref, X_feas, X_feas_norm, train_X, train_X_norm, idx, m):
+    #parameters_needed = num_start, train_indices, eval_spec_y, train_Y, new_spec_x, wcount_good, target_func, pref, X_feas, X_feas_norm, train_X, train_X_norm, idx, m
+    for i in range(0, num_start):
+        idx_x = int(train_indices[i, 0])
+        idx_y = int(train_indices[i, 1])
+        spec_y = eval_spec_y[idx_x, idx_y, :]
+        
+        train_Y[i, 0] = func_human_interacted_obj(idx_x, idx_y, new_spec_x, spec_y, wcount_good, target_func, pref[i, 0])
+    
+    var_params = [wcount_good, pref, target_func]
+    test_X, test_X_norm, train_X, train_X_norm, train_Y, var_params, idx, m = X_feas, X_feas_norm, train_X, train_X_norm, train_Y, var_params, idx, m
+    
+    return {
+        "train_Y": train_Y,
+        "var_params": var_params,
+        "test_X": test_X,
+        "test_X_norm": test_X_norm,
+        "train_X": train_X,
+        "train_X_norm": train_X_norm,
+        "idx": idx,
+        "m": m,
     }
