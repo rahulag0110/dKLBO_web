@@ -1,7 +1,7 @@
 // src/components/VotesPage.jsx
 import React from 'react';
 
-const VotesPage = ({ plotHistory, trainY }) => {
+const VotesPage = ({ plotHistory, trainY, onGoForBO }) => {
   // Reverse the order of plot history to display the latest first
   const history = plotHistory.reverse();
 
@@ -20,6 +20,7 @@ const VotesPage = ({ plotHistory, trainY }) => {
           <p>Weight: {item.rating?.newspec_wt ?? 'N/A'}</p>
         </div>
       ))}
+      <button onClick={onGoForBO}>Go for BO</button>
     </div>
   );
 };

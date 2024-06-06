@@ -7,6 +7,7 @@ import PlotDisplay from './components/PlotDisplay';
 import VoteInput from './components/VoteInput';
 import PreviousPlots from './components/PreviousPlots';
 import VotesPage from './components/VotesPage';
+import BOSetup from './components/BOSetup';
 import axios from 'axios';
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
   const [initialEvalStarted, setInitialEvalStarted] = useState(false);
   const [votingComplete, setVotingComplete] = useState(false);
   const [trainY, setTrainY] = useState(null);
+  const [boSetup, setBOSetup] = useState(false);
 
   const handleNumStartSet = () => {
     setNumStartSet(true);
@@ -32,7 +34,6 @@ const App = () => {
   const startEvaluation = async () => {
     try {
       const response = await axios.post('http://localhost:8000/initial_eval_loop_plot/');
-      console.log(response.data);
       setCurrentPlot(response.data.plot_data);
       setCurrentWcountGood(response.data.current_wcount_good);
       setPlotHistory(response.data.plot_history);
@@ -47,17 +48,14 @@ const App = () => {
   const handleVoteSubmit = async (voteData) => {
     try {
       const response = await axios.post('http://localhost:8000/initial_eval_vote_process/', voteData);
-      console.log(response.data);
       setCurrentIteration((prev) => prev + 1);
       setPlotHistory(response.data.plot_history);
-      if (currentIteration >= numStart) {
-        const finishResponse = await axios.post('http://localhost:8000/initial_eval_finish/');
-        console.log(finishResponse.data);
+      if (currentIteration + 1 >= numStart) {
+        const finishResponse = await axios.post('http://localhost:8000/initial_eval_finish');
         setTrainY(finishResponse.data.train_Y);
         setVotingComplete(true);
       } else {
         const nextResponse = await axios.post('http://localhost:8000/initial_eval_loop_plot/');
-        console.log(nextResponse.data);
         setCurrentPlot(nextResponse.data.plot_data);
         setCurrentWcountGood(nextResponse.data.current_wcount_good);
         setPlotHistory(nextResponse.data.plot_history);
@@ -67,8 +65,26 @@ const App = () => {
     }
   };
 
+  const handleGoForBO = async () => {
+    try {
+      await axios.post('http://localhost:8000/bo_setup/');
+      setBOSetup(true);
+    } catch (error) {
+      console.error('Error setting up BO:', error);
+    }
+  };
+
+  const handleBOSetupComplete = () => {
+    // Handle the next steps after setting num_bo, e.g., transition to the BO process page
+    console.log('BO setup complete');
+  };
+
+  if (boSetup) {
+    return <BOSetup onBOSetupComplete={handleBOSetupComplete} />;
+  }
+
   if (votingComplete) {
-    return <VotesPage plotHistory={plotHistory} trainY={trainY} />;
+    return <VotesPage plotHistory={plotHistory} trainY={trainY} onGoForBO={handleGoForBO} />;
   }
 
   return (
