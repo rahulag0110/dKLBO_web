@@ -11,19 +11,29 @@ import BOSetup from './components/BOSetup';
 import axios from 'axios';
 
 const App = () => {
+  
+// Intial Evaluation Checkpoint Variables
   const [numStartSet, setNumStartSet] = useState(false);
   const [preprocessingDone, setPreprocessingDone] = useState(false);
+  const [initialEvalStarted, setInitialEvalStarted] = useState(false);
+  const [votingComplete, setVotingComplete] = useState(false);
+
+//   Initial Evaluation Data Variables
   const [currentPlot, setCurrentPlot] = useState(null);
   const [currentWcountGood, setCurrentWcountGood] = useState(0);
   const [plotHistory, setPlotHistory] = useState([]);
   const [currentIteration, setCurrentIteration] = useState(0);
-  const [numStart, setNumStart] = useState(0);
-  const [initialEvalStarted, setInitialEvalStarted] = useState(false);
-  const [votingComplete, setVotingComplete] = useState(false);
+  const [numStart, setNumStart] = useState(0); 
   const [trainY, setTrainY] = useState(null);
+
+//   Bayesian Optimization Checkpoint Variables
   const [boSetup, setBOSetup] = useState(false);
+
+//   Bayesian Optimization Data Variables
   const [numBO, setNumBO] = useState(0);
 
+
+//   Initial Evaluation Functions
   const handleNumStartSet = () => {
     setNumStartSet(true);
   };
@@ -39,7 +49,7 @@ const App = () => {
       setCurrentWcountGood(response.data.current_wcount_good);
       setPlotHistory(response.data.plot_history);
       setCurrentIteration(1);
-      setNumStart(response.data.num_start); // Assuming the backend can return num_start
+      setNumStart(response.data.num_start);
       setInitialEvalStarted(true);
     } catch (error) {
       console.error('Error fetching initial plot:', error);
@@ -51,7 +61,7 @@ const App = () => {
       const response = await axios.post('http://localhost:8000/initial_eval_vote_process/', voteData);
       setCurrentIteration((prev) => prev + 1);
       setPlotHistory(response.data.plot_history);
-      if (currentIteration + 1 >= numStart) {
+      if (currentIteration + 1 > numStart) {
         const finishResponse = await axios.post('http://localhost:8000/initial_eval_finish');
         setTrainY(finishResponse.data.train_Y);
         setVotingComplete(true);
@@ -66,6 +76,8 @@ const App = () => {
     }
   };
 
+
+//   Bayesian Optimization Functions
   const handleGoForBO = async () => {
     try {
       await axios.post('http://localhost:8000/bo_setup/');
@@ -80,6 +92,8 @@ const App = () => {
     // Transition to the next part of the BO logic, which will be implemented next
   };
 
+
+//   Render Logic
   if (boSetup) {
     return <BOSetup onSetupComplete={handleBOSetupComplete} />;
   }
