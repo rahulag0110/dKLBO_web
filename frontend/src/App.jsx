@@ -22,6 +22,7 @@ const App = () => {
   const [votingComplete, setVotingComplete] = useState(false);
   const [trainY, setTrainY] = useState(null);
   const [boSetup, setBOSetup] = useState(false);
+  const [numBO, setNumBO] = useState(0);
 
   const handleNumStartSet = () => {
     setNumStartSet(true);
@@ -74,13 +75,13 @@ const App = () => {
     }
   };
 
-  const handleBOSetupComplete = () => {
-    // Handle the next steps after setting num_bo, e.g., transition to the BO process page
-    console.log('BO setup complete');
+  const handleBOSetupComplete = (numBO) => {
+    setNumBO(numBO);
+    // Transition to the next part of the BO logic, which will be implemented next
   };
 
   if (boSetup) {
-    return <BOSetup onBOSetupComplete={handleBOSetupComplete} />;
+    return <BOSetup onSetupComplete={handleBOSetupComplete} />;
   }
 
   if (votingComplete) {

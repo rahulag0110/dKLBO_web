@@ -2,36 +2,38 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const BOSetup = ({ onBOSetupComplete }) => {
-  const [numBo, setNumBo] = useState('');
+const BOSetup = ({ onSetupComplete }) => {
+  const [numBO, setNumBO] = useState('');
   const [isSet, setIsSet] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/set_num_bo/', { num_bo: parseInt(numBo) });
+      const response = await axios.post('http://localhost:8000/set_num_bo/', { num_bo: parseInt(numBO) });
       console.log(response.data);
-      alert('Num BO set successfully');
+      alert('Number of BO iterations set successfully');
       setIsSet(true);
-      onBOSetupComplete();
+      onSetupComplete(parseInt(numBO));
     } catch (error) {
-      console.error('Error setting num BO:', error);
+      console.error('Error setting number of BO iterations:', error);
     }
   };
 
+  if (isSet) return null;
+
   return (
     <div>
-      <h1>Bayesian Optimization Setup</h1>
+      <h1>Bayesian Optimization</h1>
       <form onSubmit={handleSubmit}>
         <label>
-          Num BO:
+          Number of BO iterations:
           <input
             type="number"
-            value={numBo}
-            onChange={(e) => setNumBo(e.target.value)}
+            value={numBO}
+            onChange={(e) => setNumBO(e.target.value)}
           />
         </label>
-        <button type="submit">Start BO</button>
+        <button type="submit">Set Number of BO Iterations</button>
       </form>
     </div>
   );
