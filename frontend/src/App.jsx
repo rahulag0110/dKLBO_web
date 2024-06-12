@@ -10,6 +10,7 @@ import VotesPage from './components/VotesPage';
 import BOSetup from './components/BOSetup';
 import BOStart from './components/BOStart';
 import BOPlotsDisplay from './components/BOPlotsDisplay';
+import BOResults from './components/BOResults'; // Import new component
 import axios from 'axios';
 
 const App = () => {
@@ -32,14 +33,17 @@ const App = () => {
   const [boReady, setBOReady] = useState(false);
   const [boLoopStarted, setBOLoopStarted] = useState(false);
   const [boPlotsReady, setBOPlotsReady] = useState(false);
-  const [boLoopFinish, setBOLoopFinish] = useState(false); // New state for BO finish
+  const [boLoopFinish, setBOLoopFinish] = useState(false);
+  const [boResultsReady, setBOResultsReady] = useState(false); // New state for BO results
 
   // Bayesian Optimization Data Variables
   const [numBO, setNumBO] = useState(0);
   const [boPlots, setBOPlots] = useState([]); // State for storing BO plots
   const [boLoopCounter, setBOLoopCounter] = useState(0); // State for BO loop counter
   const [userSatisfied, setUserSatisfied] = useState(null); // State for user satisfaction
-  const [boFigures, setBOFigures] = useState([]); // State for storing automated BO figures
+  const [GPFigures, setGPFigures] = useState([]); // State for storing GP figures
+  const [locationPlots, setLocationPlots] = useState([]); // State for storing location plots
+  const [optimResults, setOptimResults] = useState([]); // State for storing optimization results
 
   // Initial Evaluation Functions
   const handleNumStartSet = () => {
@@ -138,12 +142,17 @@ const App = () => {
         
         // Automated Step
         const response = await axios.post('http://localhost:8000/bo_loop_automated/');
-        setBOFigures(response.data.figures);
+        setGPFigures(response.data.GP_figures);
+        setLocationPlots(response.data.location_plots);
         
         // Finish BO loop
         setBOLoopFinish(true);
-        setBOLoopStarted(false);
-        
+
+        // Call BO finish endpoint
+        const finishResponse = await axios.post('http://localhost:8000/bo_finish/');
+        setOptimResults(finishResponse.data.optim_results);
+        setBOResultsReady(true);
+
       } catch (error) {
         console.error('Error completing BO loop:', error);
       }
@@ -151,6 +160,10 @@ const App = () => {
   };
 
   // Render Logic
+  if (boResultsReady) {
+    return <BOResults optimResults={optimResults} GPFigures={GPFigures} locationPlots={locationPlots} />; // Render the final results and figures
+  }
+
   if (boLoopFinish) {
     return <div>Automated BO Completed.</div>; // Placeholder message for automated BO completion
   }
@@ -160,7 +173,7 @@ const App = () => {
   }
 
   if (boLoopStarted) {
-    return <div>Running BO...</div>; // Show running message during automated step
+    return <div>Running Automated BO...</div>; // Show running message during automated step
   }
 
   if (boReady) {
