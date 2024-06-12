@@ -8,32 +8,40 @@ import VoteInput from './components/VoteInput';
 import PreviousPlots from './components/PreviousPlots';
 import VotesPage from './components/VotesPage';
 import BOSetup from './components/BOSetup';
+import BOStart from './components/BOStart';
+import BOPlotsDisplay from './components/BOPlotsDisplay';
 import axios from 'axios';
 
 const App = () => {
-  
-// Intial Evaluation Checkpoint Variables
+  // Initial Evaluation Checkpoint Variables
   const [numStartSet, setNumStartSet] = useState(false);
   const [preprocessingDone, setPreprocessingDone] = useState(false);
   const [initialEvalStarted, setInitialEvalStarted] = useState(false);
   const [votingComplete, setVotingComplete] = useState(false);
 
-//   Initial Evaluation Data Variables
+  // Initial Evaluation Data Variables
   const [currentPlot, setCurrentPlot] = useState(null);
   const [currentWcountGood, setCurrentWcountGood] = useState(0);
   const [plotHistory, setPlotHistory] = useState([]);
   const [currentIteration, setCurrentIteration] = useState(0);
-  const [numStart, setNumStart] = useState(0); 
+  const [numStart, setNumStart] = useState(0);
   const [trainY, setTrainY] = useState(null);
 
-//   Bayesian Optimization Checkpoint Variables
+  // Bayesian Optimization Checkpoint Variables
   const [boSetup, setBOSetup] = useState(false);
+  const [boReady, setBOReady] = useState(false);
+  const [boLoopStarted, setBOLoopStarted] = useState(false);
+  const [boPlotsReady, setBOPlotsReady] = useState(false);
+  const [boLoopFinish, setBOLoopFinish] = useState(false); // New state for BO finish
 
-//   Bayesian Optimization Data Variables
+  // Bayesian Optimization Data Variables
   const [numBO, setNumBO] = useState(0);
+  const [boPlots, setBOPlots] = useState([]); // State for storing BO plots
+  const [boLoopCounter, setBOLoopCounter] = useState(0); // State for BO loop counter
+  const [userSatisfied, setUserSatisfied] = useState(null); // State for user satisfaction
+  const [boFigures, setBOFigures] = useState([]); // State for storing automated BO figures
 
-
-//   Initial Evaluation Functions
+  // Initial Evaluation Functions
   const handleNumStartSet = () => {
     setNumStartSet(true);
   };
@@ -76,8 +84,7 @@ const App = () => {
     }
   };
 
-
-//   Bayesian Optimization Functions
+  // Bayesian Optimization Functions
   const handleGoForBO = async () => {
     try {
       await axios.post('http://localhost:8000/bo_setup/');
@@ -89,11 +96,77 @@ const App = () => {
 
   const handleBOSetupComplete = (numBO) => {
     setNumBO(numBO);
-    // Transition to the next part of the BO logic, which will be implemented next
+    setBOReady(true);
   };
 
+  const handleStartBOLoop = async () => {
+    setBOLoopStarted(true); // Set state to show running message
+    try {
+      // First Step
+      const firstStepResponse = await axios.post('http://localhost:8000/bo_loop_first_step/');
+      setBOLoopCounter(firstStepResponse.data.bo_loop_counter);
+      setBOPlots(firstStepResponse.data.bo_plots);
 
-//   Render Logic
+      // Second Step
+      await axios.post('http://localhost:8000/bo_loop_second_step/');
+
+      // Third Step
+      await axios.post('http://localhost:8000/bo_loop_third_step/');
+
+      // Set state to display BO plots
+      setBOPlotsReady(true);
+
+    } catch (error) {
+      console.error('Error starting BO loop:', error);
+    }
+  };
+
+  const handleUserSatisfactionSubmit = async (satisfaction) => {
+    setUserSatisfied(satisfaction);
+    console.log(`User satisfaction: ${satisfaction}`);
+    setBOPlotsReady(false);
+    if (satisfaction) { // If user is satisfied
+      try {
+        // Fourth Step
+        await axios.post('http://localhost:8000/bo_loop_fourth_step_satisfied/');
+        
+        // Fifth Step
+        await axios.post('http://localhost:8000/bo_loop_fifth_step/');
+        
+        // Show message
+        // Use existing state to show progress message
+        
+        // Automated Step
+        const response = await axios.post('http://localhost:8000/bo_loop_automated/');
+        setBOFigures(response.data.figures);
+        
+        // Finish BO loop
+        setBOLoopFinish(true);
+        setBOLoopStarted(false);
+        
+      } catch (error) {
+        console.error('Error completing BO loop:', error);
+      }
+    }
+  };
+
+  // Render Logic
+  if (boLoopFinish) {
+    return <div>Automated BO Completed.</div>; // Placeholder message for automated BO completion
+  }
+
+  if (boPlotsReady) {
+    return <BOPlotsDisplay boPlots={boPlots} onSatisfactionSubmit={handleUserSatisfactionSubmit} />; // Pass the satisfaction submit handler
+  }
+
+  if (boLoopStarted) {
+    return <div>Running BO...</div>; // Show running message during automated step
+  }
+
+  if (boReady) {
+    return <BOStart onStartBOLoop={handleStartBOLoop} />;
+  }
+
   if (boSetup) {
     return <BOSetup onSetupComplete={handleBOSetupComplete} />;
   }
