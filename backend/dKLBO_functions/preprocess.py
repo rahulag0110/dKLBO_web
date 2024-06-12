@@ -31,7 +31,7 @@ def preprocess(data, num_start):
     
     coordinates = aoi.utils.get_coord_grid(img, step=1, return_dict=False)
     features, targets, indices = aoi.utils.extract_patches_and_spectra(specim, img, coordinates=coordinates, window_size=window_size, avg_pool=1)
-
+    print("targets = ", targets)
     # check2 = {
     #     "features.shape": features.shape, 
     #     "targets.shape": targets.shape
@@ -39,7 +39,7 @@ def preprocess(data, num_start):
     
     norm_ = lambda x: (x - x.min()) / x.ptp()
     features, targets = norm_(features), norm_(targets)
-    
+    print("targets = ", targets)
     n, d1, d2 = features.shape
     N = int(100)
     m = 0
@@ -115,5 +115,7 @@ def preprocess(data, num_start):
             "pref": pref,
             "wcount_good": wcount_good,
             "target_func": target_func,
-            "initial_eval_loop_counter": initial_eval_loop_counter
+            "initial_eval_loop_counter": initial_eval_loop_counter,
+            "indices": indices,
+            "targets": targets,
             }

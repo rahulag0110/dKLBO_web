@@ -4,11 +4,6 @@ import base64
 import io
 from skimage.metrics import structural_similarity as ssim
 
-def return_new_measurement(full_dataset, points_measured):
-    ampdat_masked = np.zeros_like(full_dataset)
-    ampdat_masked[points_measured,:] = full_dataset[points_measured,:]
-    return ampdat_masked, points_measured
-
 def generate_plots_for_initial_eval(idx_x, idx_y, new_spec_x, new_spec_y, img, wcount_good, target_func):
     #parameters_needed = idx_x, idx_y, new_spec_x, new_spec_y, img, wcount_good, target_func
     idx1 = int(idx_x)
@@ -159,6 +154,12 @@ def initial_eval_finish(num_start, train_indices, eval_spec_y, train_Y, new_spec
     
     var_params = [wcount_good, pref, target_func]
     test_X, test_X_norm, train_X, train_X_norm, train_Y, var_params, idx, m = X_feas, X_feas_norm, train_X, train_X_norm, train_Y, var_params, idx, m
+    
+    print("var_params: ", var_params)
+    print("test_X: ", test_X)
+    print("test_X_norm: ", test_X_norm)
+    print("train_Y: ", train_Y)
+    print("idx: ", idx)
     
     return {
         "train_Y": train_Y,
