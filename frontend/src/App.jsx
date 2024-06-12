@@ -11,6 +11,7 @@ import BOSetup from './components/BOSetup';
 import BOStart from './components/BOStart';
 import BOPlotsDisplay from './components/BOPlotsDisplay';
 import BOResults from './components/BOResults'; // Import new component
+import BOUnsatisfiedVote from './components/BOUnsatisfiedVote'; // Import new component
 import axios from 'axios';
 
 const App = () => {
@@ -35,6 +36,7 @@ const App = () => {
   const [boPlotsReady, setBOPlotsReady] = useState(false);
   const [boLoopFinish, setBOLoopFinish] = useState(false);
   const [boResultsReady, setBOResultsReady] = useState(false); // New state for BO results
+  const [unsatisfiedVoteReady, setUnsatisfiedVoteReady] = useState(false); // State for unsatisfied vote
 
   // Bayesian Optimization Data Variables
   const [numBO, setNumBO] = useState(0);
@@ -44,6 +46,7 @@ const App = () => {
   const [GPFigures, setGPFigures] = useState([]); // State for storing GP figures
   const [locationPlots, setLocationPlots] = useState([]); // State for storing location plots
   const [optimResults, setOptimResults] = useState([]); // State for storing optimization results
+  const [unsatisfiedPlot, setUnsatisfiedPlot] = useState(null); // State for storing the plot for unsatisfied case
 
   // Initial Evaluation Functions
   const handleNumStartSet = () => {
@@ -156,12 +159,55 @@ const App = () => {
       } catch (error) {
         console.error('Error completing BO loop:', error);
       }
+    } else { // If user is not satisfied
+      try {
+        // Fourth Step Unsatisfied Plot
+        const unsatisfiedPlotResponse = await axios.post('http://localhost:8000/bo_loop_fourth_step_unsatisfied_plot/');
+        setUnsatisfiedPlot(unsatisfiedPlotResponse.data.plot);
+
+        // Prepare to vote on the new plot
+        setUnsatisfiedVoteReady(true);
+        
+      } catch (error) {
+        console.error('Error handling unsatisfied case:', error);
+      }
+    }
+  };
+
+  const handleUnsatisfiedVoteSubmit = async (voteData) => {
+    try {
+      // Submit unsatisfied vote
+      setUnsatisfiedVoteReady(false);
+      await axios.post('http://localhost:8000/bo_loop_fourth_step_unsatisfied_vote_process/', voteData);
+
+      // Fourth Step Unsatisfied
+      await axios.post('http://localhost:8000/bo_loop_fourth_step_unsatisfied/');
+
+      // Fifth Step
+      const fifthStepResponse = await axios.post('http://localhost:8000/bo_loop_fifth_step/');
+      setBOLoopCounter(fifthStepResponse.data.bo_loop_counter);
+
+      if (fifthStepResponse.data.bo_loop_counter > numBO) {
+        // Call BO finish endpoint
+        const finishResponse = await axios.post('http://localhost:8000/bo_finish/');
+        setOptimResults(finishResponse.data.optim_results);
+        setBOResultsReady(true);
+      } else {
+        // Restart BO loop
+        handleStartBOLoop();
+      }
+    } catch (error) {
+      console.error('Error submitting unsatisfied vote:', error);
     }
   };
 
   // Render Logic
   if (boResultsReady) {
     return <BOResults optimResults={optimResults} GPFigures={GPFigures} locationPlots={locationPlots} />; // Render the final results and figures
+  }
+
+  if (unsatisfiedVoteReady) {
+    return <BOUnsatisfiedVote plotData={unsatisfiedPlot} onVoteSubmit={handleUnsatisfiedVoteSubmit} />; // Render the unsatisfied vote page
   }
 
   if (boLoopFinish) {
