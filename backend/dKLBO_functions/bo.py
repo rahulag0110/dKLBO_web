@@ -619,9 +619,11 @@ def augment_newdata_KL_satisfied(acq_X, acq_X_norm, acq_indices, train_X, train_
     # plt.savefig(location_plot_buffer, format='png')
     # location_plot = base64.b64encode(location_plot_buffer.getvalue()).decode('utf-8')
 
-    loc_fig, loc_ax = plt.subplots()
-    loc_ax.plot(new_spec_x, new_spec_y)
-    loc_ax.set_title(f'loc: {idx_y},{idx_x}', fontsize=20)
+    loc_fig, loc_ax = plt.subplots(ncols=2, figsize=(12,5))
+    loc_ax[0].plot(new_spec_x, new_spec_y)
+    loc_ax[0].set_title(f'loc: {idx_y},{idx_x}', fontsize=20)
+    loc_ax[1].plot(new_spec_x, target_func)
+    loc_ax[1].set_title('Target function', fontsize = 20)
     
     location_plot_buffer = io.BytesIO()
     plt.savefig(location_plot_buffer, format='png')
