@@ -12,6 +12,7 @@ def preprocess(data, num_start):
     img = amp_slices[:, 16].reshape(50, 50)
 
     vdc_full = np.array(beps_all[0][1][0])
+    del beps_all
     vdc_vec = vdc_full[-64:]
 
     amp_mat = amp_slices[:, -128:][:, 1::2]
@@ -20,13 +21,6 @@ def preprocess(data, num_start):
     spec_length = amp_mat.shape[-1]  # Update spectral data length
     specim = np.reshape(amp_mat, (img.shape[0], img.shape[1], spec_length))
 
-    # check1 =  {
-    #     "img_shape": img.shape,
-    #     "vdc_vec_shape": vdc_vec.shape,
-    #     "amp_slices_shape": amp_slices.shape,
-    #     "specim_shape": specim.shape
-    # }
-    
     window_size = 4
     
     coordinates = aoi.utils.get_coord_grid(img, step=1, return_dict=False)

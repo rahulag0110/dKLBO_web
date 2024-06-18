@@ -105,11 +105,13 @@ async def process_file(file: UploadFile = File(...)):
         # Read and write the file in chunks
         while content := await file.read(1024*1024):  # read in 1MB chunks
             temp_file.write(content)
+    del temp_file
 
     # Open the temporary file in read mode and process
     with open("temp_large_file.p", "rb") as f:
         try:
             uploaded_file = pickle.load(f)
+            del f
         except Exception as e:
             return {"Read error": str(e)}
 
@@ -119,6 +121,7 @@ async def process_file(file: UploadFile = File(...)):
     print("File uploaded successfully")  
     num_start = parameters_state["num_start"]  
     preprocess_return = preprocess(uploaded_file, num_start)
+    del uploaded_file
     parameters_state["spec_length"] = preprocess_return["spec_length"]
     parameters_state["idx"] = preprocess_return["idx"]
     parameters_state["vdc_vec"] = preprocess_return["vdc_vec"]
