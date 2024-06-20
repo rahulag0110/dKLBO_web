@@ -471,11 +471,14 @@ def bo_loop_fifth_step(train_X_norm, train_Y):
     
     
 
-def bo_loop_automated(bo_loop_counter, num_bo, test_X_norm, indices, img, test_X, targets, vdc_vec, eval_spec_y, gp_surro, train_indices, train_Y, idx, train_X, train_X_norm, var_params, switch_obj_index, m):
+def bo_loop_automated(bo_loop_counter, num_bo, test_X_norm, indices, img, test_X, targets, vdc_vec, eval_spec_y, gp_surro, train_indices, train_Y, idx, train_X, train_X_norm, var_params, switch_obj_index, m, X_eval, X_GP):
     figures = []
     location_plots = []
-    for i in range(bo_loop_counter+1, num_bo + 1):
-
+    if (num_bo - bo_loop_counter) <= 5:
+        num_iter = num_bo
+    else:
+        num_iter = bo_loop_counter + 5
+    for i in range(bo_loop_counter + 1, num_iter + 1):
         print("Step# ", i)
         y_pred_means, y_pred_vars = cal_posterior(gp_surro, test_X_norm)
 
@@ -530,7 +533,9 @@ def bo_loop_automated(bo_loop_counter, num_bo, test_X_norm, indices, img, test_X
             location_plots.append(location_plot)
             gp_surro = optimize_dKLgp(train_X_norm, train_Y[:, 0])
     
+    bo_loop_counter = bo_loop_counter + (num_iter - bo_loop_counter)
     return {
+        "bo_loop_counter": bo_loop_counter,
         "figures": figures,
         "gp_surro": gp_surro,
         "test_X_norm": test_X_norm,
@@ -642,60 +647,3 @@ def augment_newdata_KL_satisfied(acq_X, acq_X_norm, acq_indices, train_X, train_
     var_params = [wcount_good, pref, target_func]
     m = m + 1
     return train_X, train_X_norm, indices, train_indices, train_Y, var_params, u, m, location_plot
-    
-def augment_newdata_KL_not_satisfied(acq_X, acq_X_norm, acq_indices, train_X, train_X_norm, train_indices, train_Y,
-                           new_spec_x, new_spec_y, eval_spec, img_space, var_params, u, m):
-        
-    #check_with_arpan
-    eval_spec_y = eval_spec
-    img = img_space
-    nextX, nextX_norm = acq_X, acq_X_norm
-    
-    wcount_good, pref, target_func = var_params[0], var_params[1], var_params[2]
-
-    #coordinates = aoi.utils.get_coord_grid(img, step=1, return_dict=False)
-    nextind = acq_indices
-    train_indices = np.vstack((train_indices, nextind))
-    #train_indices = torch.from_numpy(train_indices)
-
-    window_size = 4
-    features, targets, indices = aoi.utils.extract_patches_and_spectra(eval_spec_y, img, coordinates=train_indices, window_size=window_size, avg_pool=1)
-    norm_ = lambda x: (x - x.min()) / x.ptp()
-    features, targets = norm_(features), norm_(targets)
-
-    features = features.reshape(-1, window_size*window_size)
-    #print(train_indices.shape, features.shape, targets.shape)
-
-
-    #nextX = acq_X
-    #nextX_norm = acq_X_norm
-
-    train_X_norm = np.vstack((train_X_norm, nextX_norm))
-    #train_X = np.vstack((train_X, nextX))
-    train_X = features
-    train_X_norm = features
-    print(train_X.shape, train_X_norm.shape)
-
-    idx = np.zeros((len(features), 1))
-    num_cols = img.shape[-1]
-    train_Y = np.empty((len(features), 1))
-
-    p = np.zeros((1, 1))
-    #x = torch.empty((1,2))
-    idx_x = int(train_indices[-1, 0])
-    idx_y = int(train_indices[-1, 1])
-
-    p[0, 0], wcount_good, target_func = generate_targetobj(idx_x, idx_y, new_spec_x, new_spec_y, img_space, wcount_good, target_func)
-    pref = np.vstack((pref, p)) #Augment pref matrix
-    for i in range(len(features)):
-        idx_x = int(indices[i, 0])
-        idx_y = int(indices[i, 1])
-        idx[i,:] = [idx_x*num_cols + idx_y]
-        spec_y = targets[i,:]
-        #print(idx_x, idx_y, spec_y)
-        train_Y[i, 0] = func_human_interacted_obj(idx_x, idx_y, new_spec_x, spec_y, wcount_good, target_func, pref[i, 0])
-
-
-    var_params = [wcount_good, pref, target_func]
-    m = m + 1
-    return train_X, train_X_norm, indices, train_indices, train_Y, var_params, u, m

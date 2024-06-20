@@ -61,6 +61,7 @@ parameters_state = {
     "gp_surro": None,
     "switch_obj_index": None,
     "bo_plots": [],
+    "location_plots": [],
     "indices": None,
     "bo_loop_counter": None,
     "var_params": None,
@@ -522,9 +523,12 @@ async def bo_loop_automated_endpoint():
     var_params = parameters_state["var_params"]
     switch_obj_index = parameters_state["switch_obj_index"]
     m = parameters_state["m"]
+    X_eval = parameters_state["X_eval"]
+    X_GP = parameters_state["X_GP"]
     
-    bo_loop_automated_return = bo_loop_automated(bo_loop_counter, num_bo, test_X_norm, indices, img, test_X, targets, vdc_vec, eval_spec_y, gp_surro, train_indices, train_Y, idx, train_X, train_X_norm, var_params, switch_obj_index, m)
+    bo_loop_automated_return = bo_loop_automated(bo_loop_counter, num_bo, test_X_norm, indices, img, test_X, targets, vdc_vec, eval_spec_y, gp_surro, train_indices, train_Y, idx, train_X, train_X_norm, var_params, switch_obj_index, m, X_eval, X_GP)
     
+    parameters_state["bo_loop_counter"] = bo_loop_automated_return["bo_loop_counter"]
     parameters_state["gp_surro"] = bo_loop_automated_return["gp_surro"]
     parameters_state["test_X_norm"] = bo_loop_automated_return["test_X_norm"]
     parameters_state["train_indices"] = bo_loop_automated_return["train_indices"]
@@ -539,9 +543,11 @@ async def bo_loop_automated_endpoint():
     for fig in figures:
         parameters_state["bo_plots"].append(fig)
     
-    location_plots = bo_loop_automated_return["location_plots"]
+    loc_plots = bo_loop_automated_return["location_plots"]
+    for plot in loc_plots:
+        parameters_state["location_plots"].append(plot)
     
-    return {"status": "bo_loop_automated success", "bo_loop_counter": parameters_state["bo_loop_counter"], "GP_figures": parameters_state["bo_plots"], "location_plots": location_plots}
+    return {"status": "bo_loop_automated success", "bo_loop_counter": parameters_state["bo_loop_counter"], "GP_figures": parameters_state["bo_plots"], "location_plots": parameters_state["location_plots"]}
 
 @app.post("/bo_finish/")
 async def bo_finish_endpoint():
