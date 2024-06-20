@@ -11,7 +11,7 @@ const NumStartInput = ({ onNumStartSet }) => {
     try {
       const response = await axios.post('http://localhost:8000/set_num_start/', { num_start: parseInt(numStart) });
       console.log(response.data);
-      alert('Num start set successfully');
+    //   alert('Num start set successfully');
       setIsSet(true);
       onNumStartSet();
     } catch (error) {

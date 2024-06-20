@@ -1,5 +1,5 @@
 // src/components/FileUpload.jsx
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import LoadingBar from './LoadingBar'; // Ensure this is correctly imported
 
@@ -7,7 +7,7 @@ const FileUpload = ({ onFileUploadComplete }) => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [isUploaded, setIsUploaded] = useState(false);
+  const progressRef = useRef(progress); // Use useRef to track the current progress
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -18,23 +18,17 @@ const FileUpload = ({ onFileUploadComplete }) => {
     formData.append('file', file);
 
     setUploading(true);
-    setIsUploaded(false); // Ensure we reset this state in case of repeated uploads
-    let intervalId = null;
-    let timeoutId = setTimeout(() => {
-      setProgress(90);
-      clearInterval(intervalId);
-    }, 120000); // Set to reach 90% at 2 minutes
+    progressRef.current = 0; // Reset progress ref
+    setProgress(0); // Reset progress state
 
-    // Start a timer to increment the progress
-    intervalId = setInterval(() => {
-      setProgress((prevProgress) => {
-        if (prevProgress < 90) {
-          return prevProgress + (90 / 120); // Increment such that it reaches 90 in 120 seconds
-        }
+    let intervalId = setInterval(() => {
+      if (progressRef.current < 90) {
+        progressRef.current += 4.3; // Increment by 1.5% every second to reach 90% in 120 seconds
+        setProgress(progressRef.current);
+      } else {
         clearInterval(intervalId);
-        return prevProgress;
-      });
-    }, 1000); // Update progress every second
+      }
+    }, 1000);
 
     try {
       const response = await axios.post('http://localhost:8000/upload/', formData, {
@@ -43,34 +37,32 @@ const FileUpload = ({ onFileUploadComplete }) => {
         },
       });
       console.log(response.data);
-      // Clear the initial timeout and interval
-      clearTimeout(timeoutId);
       clearInterval(intervalId);
 
       // Animate to 100% in 5 seconds
-      let finalProgress = progress;
+      let step = (100 - progressRef.current) / 50; // Calculate steps to reach 100 in 5 seconds
       const finalInterval = setInterval(() => {
-        if (finalProgress < 100) {
-          finalProgress += 2; // This will add 2% every 100 ms, completing the remaining part in about 5 seconds
-          setProgress(finalProgress);
+        if (progressRef.current < 100) {
+          progressRef.current += step;
+          if (progressRef.current > 100) {
+            progressRef.current = 100; // Ensure it reaches 100
+          }
+          setProgress(progressRef.current);
         } else {
           clearInterval(finalInterval);
-          setIsUploaded(true); // Set upload complete here
-          setUploading(false); // End uploading only after animation is complete
-          alert('Preprocessing done');
-          onFileUploadComplete(); // Proceed to the next page after reaching 100%
+          setProgress(100); // Ensure it reaches 100
+          setUploading(false); // End uploading
+          alert('File uploaded successfully!');
+          onFileUploadComplete(); // Callback to parent to proceed
         }
       }, 100);
-      
+
     } catch (error) {
       console.error('Error uploading file:', error);
       clearInterval(intervalId);
-      clearTimeout(timeoutId);
       setUploading(false);
     }
   };
-
-  if (isUploaded) return null; // This line may be too abrupt if the next component doesn't immediately take over
 
   return (
     <div>
