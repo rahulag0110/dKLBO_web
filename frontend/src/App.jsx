@@ -13,6 +13,7 @@ import BOPlotsDisplay from './components/BOPlotsDisplay';
 import BOResults from './components/BOResults'; // Import new component
 import BOUnsatisfiedVote from './components/BOUnsatisfiedVote'; // Import new component
 import axios from 'axios';
+import LoadingBar from './components/LoadingBar';
 
 const App = () => {
   // Initial Evaluation Checkpoint Variables
@@ -47,6 +48,10 @@ const App = () => {
   const [locationPlots, setLocationPlots] = useState([]); // State for storing location plots
   const [optimResults, setOptimResults] = useState([]); // State for storing optimization results
   const [unsatisfiedPlot, setUnsatisfiedPlot] = useState(null); // State for storing the plot for unsatisfied case
+
+
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [loadingVisible, setLoadingVisible] = useState(false);
 
   // Initial Evaluation Functions
   const handleNumStartSet = () => {
@@ -127,7 +132,33 @@ const App = () => {
       console.error('Error starting BO loop:', error);
     }
   };
+  const runAutomatedBOLoop = async () => {
+    try {
+      // Automated Step
+      setLoadingVisible(true);
+      const response = await axios.post('http://localhost:8000/bo_loop_automated/');
+      setBOLoopCounter(response.data.bo_loop_counter);
+      
+      if (response.data.bo_loop_counter >= numBO) {
+        // Finish BO loop
+        setBOLoopFinish(true);
+        setLoadingVisible(false);
+        setGPFigures(response.data.GP_figures);
+        setLocationPlots(response.data.location_plots);
 
+        // Call BO finish endpoint
+        const finishResponse = await axios.post('http://localhost:8000/bo_finish/');
+        setOptimResults(finishResponse.data.optim_results);
+        setBOResultsReady(true);
+      } else {
+        // Show loading bar
+        setLoadingVisible(true);
+        runAutomatedBOLoop();
+      }
+    } catch (error) {
+      console.error('Error running automated BO loop:', error);
+    }
+  };
   const handleUserSatisfactionSubmit = async (satisfaction) => {
     setUserSatisfied(satisfaction);
     console.log(`User satisfaction: ${satisfaction}`);
@@ -141,21 +172,8 @@ const App = () => {
         await axios.post('http://localhost:8000/bo_loop_fifth_step/');
         
         // Show message
-        // Use existing state to show progress message
-        
-        // Automated Step
-        const response = await axios.post('http://localhost:8000/bo_loop_automated/');
-        setGPFigures(response.data.GP_figures);
-        setLocationPlots(response.data.location_plots);
-        
-        // Finish BO loop
-        setBOLoopFinish(true);
 
-        // Call BO finish endpoint
-        const finishResponse = await axios.post('http://localhost:8000/bo_finish/');
-        setOptimResults(finishResponse.data.optim_results);
-        setBOResultsReady(true);
-
+        runAutomatedBOLoop();
       } catch (error) {
         console.error('Error completing BO loop:', error);
       }
@@ -219,7 +237,12 @@ const App = () => {
   }
 
   if (boLoopStarted) {
-    return <div>Running Automated BO...</div>; // Show running message during automated step
+    return (
+      <div>
+        {/* <div>STEP: {boLoopCounter}/{numBO}</div> */}
+        {loadingVisible && <LoadingBar progress={(boLoopCounter / numBO) * 100} />}
+      </div>
+    );
   }
 
   if (boReady) {
