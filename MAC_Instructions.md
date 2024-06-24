@@ -60,6 +60,10 @@
   - In Chrome, type `localhost:8080` in the address bar and press **Enter**.
   - The web application's interface should now be visible.
 
+### 6. Closing the application
+- To close the application after usage, go to the termianl and press "CTRL+C". This would bring down the docker container.
+- Close the docker app and the chorme tab.
+
 ---
 
 ## Section 2: Running After Installation
@@ -94,6 +98,10 @@
 - **Navigate to the Web Application:**
   - In Chrome, type `localhost:8080` in the address bar and press **Enter**.
   - You should see the web application’s interface.
+
+### 4. Closing the application
+- To close the application after usage, go to the termianl and press "CTRL+C". This would bring down the docker container.
+- Close the docker app and the chorme tab.
 
 ---
 
