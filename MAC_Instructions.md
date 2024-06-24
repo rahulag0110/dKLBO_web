@@ -50,6 +50,7 @@
     docker-compose up --build
     ```
   - The initial build process may take **15-30 minutes**. Docker will download and configure all necessary dependencies during this time.
+  - Wait till you see "backend-1   | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)"
 
 ### 5. Access the Web Application
 
@@ -84,6 +85,7 @@
     docker-compose up
     ```
   - This time, the startup should be quick, taking less than **10 seconds**.
+  - Wait till you see "backend-1   | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)"
 
 ### 3. Access the Web Application
 
