@@ -98,10 +98,8 @@
 ## Troubleshooting Tips
 
 - **Docker Memory Issues:**
-  - If Docker has performance issues, confirm the memory allocation is still set to 14 GB.
-- **Port Conflicts:**
-  - If `localhost:8080` doesn’t work, check for port conflicts or update the `docker-compose.yml` to use a different port.
+  - If Docker is exiting with code 137, there are memory issues, confirm the memory allocation is still set to 14 GB or higher. If issue still persists try to increase the memory limit if you mac allows and contact the support team.
 - **Permission Issues:**
   - Ensure you have the necessary permissions to run Docker commands. You might need to use `sudo` for certain commands, especially if prompted for elevated privileges.
 
-By following these instructions, you should be able to both set up the web app for the first time and run it subsequently with ease. For any issues or additional help, refer to the application's documentation or reach out to the support team.
+By following these instructions, you should be able to both set up the web app for the first time and run it subsequently with ease. For any issues or additional help reach out to the support team.
