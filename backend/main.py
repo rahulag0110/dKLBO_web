@@ -88,9 +88,40 @@ parameters_state = {
     "optim_results": None
 }
 
+aug_func_state = {
+    "train_X": None,
+    "train_X_norm": None,
+    "train_indices": None,
+    "train_Y": None,
+    "num_cols": None,
+    "idx": None,
+    "features": None,
+    "targets": None,
+    "idx_x": None,
+    "idx_y": None,
+    "indices": None,
+    "p": None,
+    "vote": None
+}
+
 @app.get("/")
 async def read_root():
     return {"Server Running"}
+
+@app.post("/reset/")
+async def reset():
+    global parameters_state
+    global aug_func_state
+    for key in parameters_state.keys():
+        parameters_state[key] = None
+        parameters_state["plot_history"] = []
+        parameters_state["bo_plots"] = []
+        parameters_state["location_plots"] = []
+    
+    for key in aug_func_state.keys():
+        aug_func_state[key] = None
+    
+    return {"status": "reset success"}
 
 @app.post("/set_num_start/")
 async def set_num_start(num_start: NumStart):
@@ -344,22 +375,6 @@ async def bo_loop_second_step_endpoint():
     print("BO LOOP COUNTER: ", parameters_state["bo_loop_counter"])
     print("BREAK BO: ", parameters_state["break_bo"])
     return {"status": "bo_loop_second_step success", "break_bo": parameters_state["break_bo"], "bo_loop_counter": parameters_state["bo_loop_counter"]}
-
-aug_func_state = {
-    "train_X": None,
-    "train_X_norm": None,
-    "train_indices": None,
-    "train_Y": None,
-    "num_cols": None,
-    "idx": None,
-    "features": None,
-    "targets": None,
-    "idx_x": None,
-    "idx_y": None,
-    "indices": None,
-    "p": None,
-    "vote": None
-    }
 
 @app.post("/bo_loop_third_step/")
 async def bo_loop_third_step_endpoint():
