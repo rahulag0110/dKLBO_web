@@ -5,9 +5,14 @@ body {
     background-image: url('./images/random.jpg');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     height: 100vh;
     font-family: Arial, sans-serif; /* Ensuring a modern font is used */
+    background: url('./images/random.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Fix the background for all devices */
 }
 
 .app-container {

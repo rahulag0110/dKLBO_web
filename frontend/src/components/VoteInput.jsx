@@ -1,5 +1,6 @@
 // src/components/VoteInput.jsx
 import React, { useState, useEffect } from 'react';
+import '../styles/InitialEvalVoting.css'; // Ensure the path matches your structure
 
 const VoteInput = ({ onVoteSubmit, currentWcountGood }) => {
   const [vote, setVote] = useState(0);
@@ -50,7 +51,7 @@ const VoteInput = ({ onVoteSubmit, currentWcountGood }) => {
   };
 
   return (
-    <div>
+    <div className="evaluation-section">
       <label>
         Vote:
         <input
@@ -108,7 +109,7 @@ const VoteInput = ({ onVoteSubmit, currentWcountGood }) => {
         </div>
       )}
       <br />
-      <button onClick={handleSubmit}>Submit Vote</button>
+      <button onClick={handleSubmit} className="evaluation-button">Submit Vote</button>
     </div>
   );
 };
