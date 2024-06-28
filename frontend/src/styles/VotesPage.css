@@ -1,0 +1,69 @@
+/* src/styles/VotesPage.css */
+.votes-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background to enhance visibility */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    width: 80%;
+    max-width: 1500px;
+    margin: 40px auto; /* Centering the box */
+}
+
+.votes-description {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center; /* Center the text */
+    padding: 10px;
+    border-bottom: 1px solid #ccc; 
+}
+
+.train-y-data {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.plot-history {
+    width: 100%;
+}
+
+.plot-item {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.votes-button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 50%;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.votes-button:hover {
+    background-color: #0056b3;
+}
+
+.train-y-data ul {
+    list-style: none;
+    padding: 0;
+}
+
+.train-y-data li {
+    background-color: #3a3734;
+    color: white;
+    padding: 5px 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    font-size: 14px;
+}

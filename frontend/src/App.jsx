@@ -252,7 +252,18 @@ const App = () => {
   }
 
   if (votingComplete) {
-    return <VotesPage plotHistory={plotHistory} trainY={trainY} onGoForBO={handleGoForBO} />;
+    return (
+        <>
+        <div className="app-container">
+            <header>
+                <h1>BOARS: Bayesian Optimized Active Recommender System</h1>
+                <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
+            </header>
+        </div>
+            <VotesPage plotHistory={plotHistory} trainY={trainY} onGoForBO={handleGoForBO} />
+        </>
+    )
+    
   }
 
   return (
