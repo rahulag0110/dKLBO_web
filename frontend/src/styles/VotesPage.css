@@ -53,7 +53,9 @@
 .votes-button:hover {
     background-color: #0056b3;
 }
-
+.votes-button:disabled {
+    background-color: #cccccc;
+}
 .train-y-data ul {
     list-style: none;
     padding: 0;
