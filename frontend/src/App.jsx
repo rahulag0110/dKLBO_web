@@ -7,7 +7,6 @@ import VoteInput from './components/VoteInput';
 import PreviousPlots from './components/PreviousPlots';
 import VotesPage from './components/VotesPage';
 import BOSetup from './components/BOSetup';
-import BOStart from './components/BOStart';
 import BOPlotsDisplay from './components/BOPlotsDisplay';
 import BOResults from './components/BOResults'; // Import new component
 import BOUnsatisfiedVote from './components/BOUnsatisfiedVote'; // Import new component
@@ -243,12 +242,8 @@ const App = () => {
     );
   }
 
-  if (boReady) {
-    return <BOStart onStartBOLoop={handleStartBOLoop} />;
-  }
-
   if (boSetup) {
-    return <BOSetup onSetupComplete={handleBOSetupComplete} />;
+    return <BOSetup onSetupComplete={handleBOSetupComplete} onStartBOLoop={handleStartBOLoop} />;
   }
 
   if (votingComplete) {

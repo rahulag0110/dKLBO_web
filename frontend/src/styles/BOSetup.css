@@ -1,0 +1,66 @@
+/* src/styles/BOSetup.css */
+.bo-setup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background to enhance visibility */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    width: 80%;
+    max-width: 600px;
+    margin: 40px auto; /* Centering the box */
+}
+
+.bo-setup-container .description {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center; /* Center the text */
+    padding: 10px;
+    border-bottom: 1px solid #ccc; /* A subtle line to separate the description */
+}
+
+.bo-setup-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.bo-setup-form label {
+    width: 80%;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.bo-setup-form input[type="number"] {
+    margin: 10px 0;
+    padding: 8px;
+    width: 80%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.bo-setup-button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 50%;
+    font-size: 16px;
+}
+
+.bo-setup-button:hover {
+    background-color: #0056b3;
+}
+
+.bo-setup-button:disabled {
+    background-color: #cccccc;
+}
