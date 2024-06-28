@@ -2,6 +2,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import LoadingBar from './LoadingBar';
+import '../styles/FileNumStartUpload.css'
 
 const FileNumStartUpload = ({ onUploadComplete }) => {
     const [file, setFile] = useState(null);
@@ -78,18 +79,17 @@ const FileNumStartUpload = ({ onUploadComplete }) => {
     };
 
     return (
-        <div>
-            <label>
-                Num Start:
-                <input
-                    type="number"
-                    value={numStart}
-                    onChange={handleNumStartChange}
-                />
-            </label>
+        <div className="upload-container">
+            <p className="description">Description...</p>
             <input type="file" onChange={handleFileChange} />
+            <input
+                type="number"
+                value={numStart}
+                onChange={handleNumStartChange}
+                placeholder="Number of initial (random) evaluations"
+            />
             <button onClick={handleUpload} disabled={!file || !numStart || uploading}>
-                {uploading ? <LoadingBar progress={progress} /> : 'Start Upload and Set Num Start'}
+                {uploading ? <LoadingBar progress={progress} /> : 'Initialize BO'}
             </button>
         </div>
     );

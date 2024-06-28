@@ -1,0 +1,36 @@
+/* src/styles/global.css */
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('./images/random.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    font-family: Arial, sans-serif; /* Ensuring a modern font is used */
+}
+
+.app-container {
+    text-align: center; /* Center align all contents */
+    color: #fff; /* White text for readability */
+    padding: 20px;
+}
+
+header {
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background for the header */
+    border-radius: 10px;
+    margin-bottom: 20px; /* Spacing below the header */
+}
+
+h1 {
+    font-size: 2.5rem; /* Large font size for main heading */
+    margin: 0;
+    padding-bottom: 10px; /* Space between heading and subtitle */
+}
+
+.app-subtitle {
+    font-size: 1.2rem; /* Appropriately smaller font size for the subtitle */
+    font-style: italic; /* Italicize the subtitle */
+    opacity: 0.8; /* Slightly faint to differentiate from the main heading */
+}

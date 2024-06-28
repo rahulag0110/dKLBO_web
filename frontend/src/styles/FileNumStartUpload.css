@@ -1,0 +1,53 @@
+/* src/styles/FileNumStartUpload.css */
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background to enhance visibility */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    width: 80%;
+    max-width: 600px;
+    margin: 40px auto; /* Centering the box */
+}
+
+.upload-container .description {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center; /* Center the text */
+    padding: 10px;
+    border-bottom: 1px solid #ccc; /* A subtle line to separate the description */
+}
+
+.upload-container input[type="file"], 
+.upload-container input[type="number"] {
+    margin: 10px 0;
+    padding: 8px;
+    width: 80%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.upload-container button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 50%;
+    font-size: 16px;
+}
+
+.upload-container button:hover {
+    background-color: #0056b3;
+}
+
+.upload-container button:disabled {
+    background-color: #cccccc;
+}

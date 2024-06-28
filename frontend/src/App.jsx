@@ -14,6 +14,8 @@ import BOUnsatisfiedVote from './components/BOUnsatisfiedVote'; // Import new co
 import axios from 'axios';
 import LoadingBar from './components/LoadingBar';
 
+import './styles/Global.css';
+
 const App = () => {
   // Initial Evaluation Checkpoint Variables
   const [numStartSet, setNumStartSet] = useState(false);
@@ -254,8 +256,11 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h1>Bayesian Optimization App</h1>
+    <div className="app-container">
+      <header>
+        <h1>BOARS: Bayesian Optimized Active Recommender System</h1>
+        <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
+      </header>
       {!numStartSet && <FileNumStartUpload onUploadComplete={handleUploadComplete} />}
       {preprocessingDone && !initialEvalStarted && <EvaluationButton startEvaluation={startEvaluation} />}
       {currentPlot && (
