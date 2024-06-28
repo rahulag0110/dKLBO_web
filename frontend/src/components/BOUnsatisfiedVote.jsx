@@ -1,5 +1,6 @@
 // src/components/BOUnsatisfiedVote.jsx
 import React, { useState, useEffect } from 'react';
+import '../styles/BOUnsatisfiedVote.css';
 
 const BOUnsatisfiedVote = ({ plotData, onVoteSubmit }) => {
   const [vote, setVote] = useState(0);
@@ -46,12 +47,11 @@ const BOUnsatisfiedVote = ({ plotData, onVoteSubmit }) => {
   };
 
   return (
-    <div>
-      <h1>Unsatisfied BO Vote</h1>
-      <img src={`data:image/png;base64,${plotData}`} alt="Unsatisfied Plot" style={{ width: '1000px' }} />
-        <br />
-      <label>
-        Vote:
+    <div className="evaluation-section">
+      <h2>Unsatisfied BO Vote</h2>
+      <img src={`data:image/png;base64,${plotData}`} alt="Unsatisfied Plot" />
+    <label>
+      Vote:
         <input
           type="radio"
           name="vote"
@@ -106,8 +106,7 @@ const BOUnsatisfiedVote = ({ plotData, onVoteSubmit }) => {
           </label>
         </div>
       )}
-      <br />
-      <button onClick={handleSubmit}>Submit Vote</button>
+      <button className="evaluation-button" onClick={handleSubmit}>Submit Vote</button>
     </div>
   );
 };

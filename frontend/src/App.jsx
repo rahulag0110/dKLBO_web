@@ -38,7 +38,7 @@ const App = () => {
   const [boLoopFinish, setBOLoopFinish] = useState(false);
   const [boResultsReady, setBOResultsReady] = useState(false); // New state for BO results
   const [unsatisfiedVoteReady, setUnsatisfiedVoteReady] = useState(false); // State for unsatisfied vote
-
+  const [boLoopStarted, setBOLoopStarted] = useState(false); // State for BO loop start
   // Bayesian Optimization Data Variables
   const [numBO, setNumBO] = useState(0);
   const [boPlots, setBOPlots] = useState([]); // State for storing BO plots
@@ -112,6 +112,7 @@ const App = () => {
      // Set state to show running message
     try {
       // First Step
+      setBOLoopStarted(true);
       const firstStepResponse = await axios.post('http://localhost:8000/bo_loop_first_step/');
       setBOLoopCounter(firstStepResponse.data.bo_loop_counter);
       setBOPlots(firstStepResponse.data.bo_plots);
@@ -143,6 +144,8 @@ const App = () => {
         setLoadingVisible(false);
         setGPFigures(response.data.GP_figures);
         setLocationPlots(response.data.location_plots);
+        setBOLoopStarted(false);
+        setAutomatedBOLoopStarted(false);
 
         // Call BO finish endpoint
         const finishResponse = await axios.post('http://localhost:8000/bo_finish/');
@@ -206,6 +209,8 @@ const App = () => {
       if (fifthStepResponse.data.bo_loop_counter > numBO) {
         // Call BO finish endpoint
         const finishResponse = await axios.post('http://localhost:8000/bo_finish/');
+        setAutomatedBOLoopStarted(false);
+        setBOLoopStarted(false);
         setOptimResults(finishResponse.data.optim_results);
         setBOResultsReady(true);
       } else {
@@ -252,6 +257,22 @@ const App = () => {
       </div>
     </>
     );
+  }
+
+  if (boLoopStarted) {
+    return (
+        <>
+        <div className="app-container">
+            <header>
+                <h1>BOARS: Bayesian Optimized Active Recommender System</h1>
+                <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
+            </header>
+        </div>
+        <div className='loading-bar-container'>
+            <h2>Please Wait...</h2>
+        </div>
+        </>
+    )
   }
 
   if (boSetup) {

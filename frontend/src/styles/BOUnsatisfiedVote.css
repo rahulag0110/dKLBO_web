@@ -1,0 +1,61 @@
+/* src/styles/BOUnsatisfiedVote.css */
+
+.evaluation-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background to enhance visibility */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    width: 80%;
+    max-width: 1000px; /* Adjust width as necessary */
+    margin: 40px auto; /* Centering the box */
+}
+
+.evaluation-section img {
+    max-width: 80%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.evaluation-section h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.evaluation-section p {
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+}
+
+.evaluation-section label {
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+}
+
+.evaluation-button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 50%;
+    font-size: 16px;
+}
+
+.evaluation-button:hover {
+    background-color: #0056b3;
+}
+
+.evaluation-button:disabled {
+    background-color: #cccccc;
+}
