@@ -1,0 +1,49 @@
+/* src/styles/BOPlotsDisplay.css */
+.bo-plots-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background to enhance visibility */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    width: 80%;
+    max-width: 1000px;
+    margin: 40px auto; /* Centering the box */
+}
+
+.bo-plots-container .description {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center; /* Center the text */
+    padding: 10px;
+    border-bottom: 1px solid #ccc; /* A subtle line to separate the description */
+}
+
+.satisfaction-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.satisfaction-container label {
+    margin: 0 10px;
+    font-size: 16px;
+}
+
+.satisfaction-container button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.satisfaction-container button:hover {
+    background-color: #0056b3;
+}

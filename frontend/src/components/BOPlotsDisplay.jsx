@@ -1,5 +1,6 @@
 // src/components/BOPlotsDisplay.jsx
 import React, { useState } from 'react';
+import '../styles/BOPlotsDisplay.css';
 
 const BOPlotsDisplay = ({ boPlots, onSatisfactionSubmit }) => {
   const validPlots = boPlots.filter((plot) => plot !== null).reverse();
@@ -14,14 +15,15 @@ const BOPlotsDisplay = ({ boPlots, onSatisfactionSubmit }) => {
   };
 
   return (
-    <div>
-      <h1>Bayesian Optimization Plots</h1>
+    <div className="bo-plots-container">
+      <p className="description">Description...</p>
+      <h2>Estimation after initial evaluation</h2>
       {validPlots.map((plot, index) => (
         <div key={index}>
           <img src={`data:image/png;base64,${plot}`} alt={`BO Plot ${index}`} style={{ width: '1000px' }} />
         </div>
       ))}
-      <div>
+      <div className="satisfaction-container">
         <h2>Are you Satisfied?</h2>
         <label>
           <input

@@ -20,7 +20,20 @@ body {
     color: #fff; /* White text for readability */
     padding: 20px;
 }
-
+.loading-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background to enhance visibility */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    width: 80%;
+    max-width: 600px;
+    margin: 40px auto; /* Centering the box */
+}
 header {
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background for the header */
@@ -38,4 +51,13 @@ h1 {
     font-size: 1.2rem; /* Appropriately smaller font size for the subtitle */
     font-style: italic; /* Italicize the subtitle */
     opacity: 0.8; /* Slightly faint to differentiate from the main heading */
+}
+
+.loading-bar-container .bar{
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    width: 50%;
+    font-size: 16px;
 }

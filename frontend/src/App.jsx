@@ -33,7 +33,7 @@ const App = () => {
   // Bayesian Optimization Checkpoint Variables
   const [boSetup, setBOSetup] = useState(false);
   const [boReady, setBOReady] = useState(false);
-  const [boLoopStarted, setBOLoopStarted] = useState(false);
+  const [automatedBOLoopStarted, setAutomatedBOLoopStarted] = useState(false);
   const [boPlotsReady, setBOPlotsReady] = useState(false);
   const [boLoopFinish, setBOLoopFinish] = useState(false);
   const [boResultsReady, setBOResultsReady] = useState(false); // New state for BO results
@@ -109,7 +109,7 @@ const App = () => {
   };
 
   const handleStartBOLoop = async () => {
-    setBOLoopStarted(true); // Set state to show running message
+     // Set state to show running message
     try {
       // First Step
       const firstStepResponse = await axios.post('http://localhost:8000/bo_loop_first_step/');
@@ -133,6 +133,7 @@ const App = () => {
     try {
       // Automated Step
       setLoadingVisible(true);
+      setAutomatedBOLoopStarted(true)
       const response = await axios.post('http://localhost:8000/bo_loop_automated/');
       setBOLoopCounter(response.data.bo_loop_counter);
       
@@ -233,12 +234,23 @@ const App = () => {
     return <BOPlotsDisplay boPlots={boPlots} onSatisfactionSubmit={handleUserSatisfactionSubmit} />; // Pass the satisfaction submit handler
   }
 
-  if (boLoopStarted) {
+  if (automatedBOLoopStarted) {
     return (
-      <div>
-        {/* <div>STEP: {boLoopCounter}/{numBO}</div> */}
-        {loadingVisible && <LoadingBar progress={(boLoopCounter / numBO) * 100} />}
+    <>
+      <div className="app-container">
+        <header>
+            <h1>BOARS: Bayesian Optimized Active Recommender System</h1>
+            <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
+        </header>
       </div>
+      <div className="loading-bar-container">
+        <h2>User interaction ends.</h2>
+        <h2>Running Automated Exploration...</h2>
+        <div className="bar">
+            {loadingVisible && <LoadingBar progress={(boLoopCounter / numBO) * 100} />}
+        </div>
+      </div>
+    </>
     );
   }
 
