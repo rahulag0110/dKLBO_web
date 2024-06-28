@@ -48,7 +48,7 @@ const BOUnsatisfiedVote = ({ plotData, onVoteSubmit }) => {
 
   return (
     <div className="evaluation-section">
-      <h2>Unsatisfied BO Vote</h2>
+      <h2>Continue Voting -- Setting UP Target</h2>
       <img src={`data:image/png;base64,${plotData}`} alt="Unsatisfied Plot" />
     <label>
       Vote:
