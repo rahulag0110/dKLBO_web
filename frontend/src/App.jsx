@@ -1,7 +1,6 @@
 // src/App.jsx
 import React, { useState } from 'react';
-import NumStartInput from './components/NumStartInput';
-import FileUpload from './components/FileUpload';
+import FileNumStartUpload from './components/FileNumStartUpload';
 import EvaluationButton from './components/EvaluationButton';
 import PlotDisplay from './components/PlotDisplay';
 import VoteInput from './components/VoteInput';
@@ -54,11 +53,8 @@ const App = () => {
   const [loadingVisible, setLoadingVisible] = useState(false);
 
   // Initial Evaluation Functions
-  const handleNumStartSet = () => {
+  const handleUploadComplete = () => {
     setNumStartSet(true);
-  };
-
-  const handleFileUploadComplete = () => {
     setPreprocessingDone(true);
   };
 
@@ -260,9 +256,8 @@ const App = () => {
   return (
     <div>
       <h1>Bayesian Optimization App</h1>
-      {!numStartSet && <NumStartInput onNumStartSet={handleNumStartSet} />}
-      {numStartSet && !preprocessingDone && <FileUpload onFileUploadComplete={handleFileUploadComplete} />}
-      {preprocessingDone && <EvaluationButton startEvaluation={startEvaluation} />}
+      {!numStartSet && <FileNumStartUpload onUploadComplete={handleUploadComplete} />}
+      {preprocessingDone && !initialEvalStarted && <EvaluationButton startEvaluation={startEvaluation} />}
       {currentPlot && (
         <div>
           <PlotDisplay plotData={currentPlot} />
