@@ -82,6 +82,7 @@ const FileNumStartUpload = ({ onUploadComplete }) => {
         <div className="upload-container">
             <p className="description">Description...</p>
             <input type="file" onChange={handleFileChange} />
+            <span className="file-name">{file ? file.name : 'No file chosen'}</span>
             <input
                 type="number"
                 value={numStart}

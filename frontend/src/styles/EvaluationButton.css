@@ -1,5 +1,5 @@
-/* src/styles/FileNumStartUpload.css */
-.upload-container {
+/* src/styles/EvaluationButton.css */
+.evaluation-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,46 +14,27 @@
     margin: 40px auto; /* Centering the box */
 }
 
-.upload-container .description {
+.evaluation-description {
     font-size: 16px;
     color: #333;
     margin-bottom: 20px;
     text-align: center; /* Center the text */
     padding: 10px;
-    border-bottom: 1px solid #ccc; /* A subtle line to separate the description */
+    border-bottom: 1px solid #ccc; 
 }
 
-.upload-container input[type="file"],
-.upload-container input[type="number"] {
-    margin: 10px 0;
-    padding: 8px;
-    width: 80%;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.upload-container button {
+.evaluation-button {
     padding: 10px 15px;
     background-color: #007BFF;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
+    font-size: 16px;
     width: 50%;
     font-size: 16px;
 }
 
-.upload-container button:hover {
+.evaluation-button:hover {
     background-color: #0056b3;
-}
-
-.upload-container button:disabled {
-    background-color: #cccccc;
-}
-
-.upload-container .file-name {
-    margin-left: 10px;
-    color: #666;
-    font-size: 12px;
 }
