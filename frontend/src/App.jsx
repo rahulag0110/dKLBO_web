@@ -224,19 +224,62 @@ const App = () => {
 
   // Render Logic
   if (boResultsReady) {
-    return <BOResults optimResults={optimResults} GPFigures={GPFigures} locationPlots={locationPlots} />; // Render the final results and figures
+    return (
+        <>
+          <div className="app-container">
+            <header>
+                <h1>BOARS: Bayesian Optimized Active Recommender System</h1>
+                <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
+            </header>
+          </div>
+          <BOResults optimResults={optimResults} GPFigures={GPFigures} locationPlots={locationPlots} />
+        </>
+    )
   }
 
   if (unsatisfiedVoteReady) {
-    return <BOUnsatisfiedVote plotData={unsatisfiedPlot} onVoteSubmit={handleUnsatisfiedVoteSubmit} />; // Render the unsatisfied vote page
-  }
+    return (
+        <>
+          <div className="app-container">
+            <header>
+                <h1>BOARS: Bayesian Optimized Active Recommender System</h1>
+                <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
+            </header>
+          </div>
+          <BOUnsatisfiedVote plotData={unsatisfiedPlot} onVoteSubmit={handleUnsatisfiedVoteSubmit} />
+        </>
+    ) 
+}
+    
 
   if (boLoopFinish) {
-    return <div>Automated BO Completed.</div>; // Placeholder message for automated BO completion
+    return (
+        <>
+        <div className="app-container">
+            <header>
+                <h1>BOARS: Bayesian Optimized Active Recommender System</h1>
+                <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
+            </header>
+        </div>
+        <div className='loading-bar-container'>
+            <h2>Generating Results...</h2>
+        </div>
+        </>
+    )
   }
 
   if (boPlotsReady) {
-    return <BOPlotsDisplay boPlots={boPlots} onSatisfactionSubmit={handleUserSatisfactionSubmit} />; // Pass the satisfaction submit handler
+    return (
+        <>
+          <div className="app-container">
+            <header>
+                <h1>BOARS: Bayesian Optimized Active Recommender System</h1>
+                <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
+            </header>
+          </div>
+          <BOPlotsDisplay boPlots={boPlots} onSatisfactionSubmit={handleUserSatisfactionSubmit} />
+        </>
+    )
   }
 
   if (automatedBOLoopStarted) {
@@ -276,7 +319,18 @@ const App = () => {
   }
 
   if (boSetup) {
-    return <BOSetup onSetupComplete={handleBOSetupComplete} onStartBOLoop={handleStartBOLoop} />;
+    return (
+        <>
+          <div className="app-container">
+            <header>
+                <h1>BOARS: Bayesian Optimized Active Recommender System</h1>
+                <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
+            </header>
+          </div>
+        <BOSetup onSetupComplete={handleBOSetupComplete} onStartBOLoop={handleStartBOLoop} />
+        </>
+    )
+    
   }
 
   if (votingComplete) {
@@ -288,7 +342,7 @@ const App = () => {
                 <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
             </header>
         </div>
-            <VotesPage plotHistory={plotHistory} trainY={trainY} onGoForBO={handleGoForBO} />
+        <VotesPage plotHistory={plotHistory} trainY={trainY} onGoForBO={handleGoForBO} />
         </>
     )
     
