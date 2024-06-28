@@ -39,6 +39,7 @@ const App = () => {
   const [boResultsReady, setBOResultsReady] = useState(false); // New state for BO results
   const [unsatisfiedVoteReady, setUnsatisfiedVoteReady] = useState(false); // State for unsatisfied vote
   const [boLoopStarted, setBOLoopStarted] = useState(false); // State for BO loop start
+  const [loadingVisible, setLoadingVisible] = useState(false);
   // Bayesian Optimization Data Variables
   const [numBO, setNumBO] = useState(0);
   const [boPlots, setBOPlots] = useState([]); // State for storing BO plots
@@ -48,12 +49,46 @@ const App = () => {
   const [locationPlots, setLocationPlots] = useState([]); // State for storing location plots
   const [optimResults, setOptimResults] = useState([]); // State for storing optimization results
   const [unsatisfiedPlot, setUnsatisfiedPlot] = useState(null); // State for storing the plot for unsatisfied case
-
-
   const [loadingProgress, setLoadingProgress] = useState(0);
-  const [loadingVisible, setLoadingVisible] = useState(false);
+  
 
   // Initial Evaluation Functions
+  const resetStates = async () => {
+    try {
+        await axios.post('http://localhost:8000/reset/');
+        setNumStartSet(false);
+        setPreprocessingDone(false);
+        setInitialEvalStarted(false);
+        setVotingComplete(false);
+        setCurrentPlot(null);
+        setCurrentWcountGood(0);
+        setPlotHistory([]);
+        setCurrentIteration(0);
+        setNumStart(0);
+        setTrainY(null);
+        setBOSetup(false);
+        setBOReady(false);
+        setAutomatedBOLoopStarted(false);
+        setBOPlotsReady(false);
+        setBOLoopFinish(false);
+        setBOResultsReady(false);
+        setUnsatisfiedVoteReady(false);
+        setBOLoopStarted(false);
+        setLoadingVisible(false);
+        setNumBO(0);
+        setBOPlots([]);
+        setBOLoopCounter(0);
+        setUserSatisfied(null);
+        setGPFigures([]);
+        setLocationPlots([]);
+        setOptimResults([]);
+        setUnsatisfiedPlot(null);
+        setLoadingProgress(0);
+    } catch (error) {
+        console.error('Error resetting states:', error);
+    }
+  };
+
   const handleUploadComplete = () => {
     setNumStartSet(true);
     setPreprocessingDone(true);
@@ -232,7 +267,7 @@ const App = () => {
                 <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
             </header>
           </div>
-          <BOResults optimResults={optimResults} GPFigures={GPFigures} locationPlots={locationPlots} />
+          <BOResults optimResults={optimResults} GPFigures={GPFigures} locationPlots={locationPlots} onReset={resetStates} />
         </>
     )
   }
@@ -354,7 +389,7 @@ const App = () => {
         <h1>BOARS: Bayesian Optimized Active Recommender System</h1>
         <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
       </header>
-      {!numStartSet && <FileNumStartUpload onUploadComplete={handleUploadComplete} />}
+      {!numStartSet && <FileNumStartUpload onUploadComplete={handleUploadComplete} initialResetStates={resetStates} />}
       {preprocessingDone && !initialEvalStarted && <EvaluationButton startEvaluation={startEvaluation} />}
       {currentPlot && (
         <div>

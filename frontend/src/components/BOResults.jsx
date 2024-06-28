@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/BOResults.css';
 
-const BOResults = ({ optimResults, GPFigures, locationPlots }) => {
+const BOResults = ({ optimResults, GPFigures, locationPlots, onReset }) => {
   const validGPFigures = GPFigures.filter((figure) => figure !== null);
   const validLocationPlots = locationPlots.filter((plot) => plot !== null);
 
@@ -25,6 +25,8 @@ const BOResults = ({ optimResults, GPFigures, locationPlots }) => {
           </div>
         ))}
       </div>
+      <h2>To reset and start again click the reset button below </h2>
+      <button className="reset-button" onClick={onReset}>Reset</button>
     </div>
   );
 };
