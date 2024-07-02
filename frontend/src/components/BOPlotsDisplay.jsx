@@ -16,7 +16,7 @@ const BOPlotsDisplay = ({ boPlots, onSatisfactionSubmit }) => {
 
   return (
     <div className="bo-plots-container">
-      <p className="description">Description...</p>
+      <p className="description">BO currently with human in the loop</p>
       <h2>Estimation after initial evaluation</h2>
       {validPlots.map((plot, index) => (
         <div key={index}>
@@ -24,7 +24,7 @@ const BOPlotsDisplay = ({ boPlots, onSatisfactionSubmit }) => {
         </div>
       ))}
       <div className="satisfaction-container">
-        <h2>Are you Satisfied?</h2>
+        <h2>Are you satisfied?</h2>
         <label>
           <input
             type="radio"

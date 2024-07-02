@@ -334,7 +334,7 @@ const App = () => {
         </header>
       </div>
       <div className="loading-bar-container">
-        <h2>User interaction ends.</h2>
+        <h2>User interaction ends. Taking human out of the loop.</h2>
         <h2>Running Automated Exploration...</h2>
         <div className="bar">
             {loadingVisible && <LoadingBar progress={(boLoopCounter / numBO) * 100} />}
