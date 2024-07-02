@@ -48,7 +48,7 @@ const BOUnsatisfiedVote = ({ plotData, onVoteSubmit }) => {
 
   return (
     <div className="evaluation-section">
-      <h2>Continue Voting -- Setting UP Target</h2>
+      <h2>Continue voting -- Setting up target</h2>
       <img src={`data:image/png;base64,${plotData}`} alt="Unsatisfied Plot" />
     <label>
       Vote:
@@ -78,7 +78,7 @@ const BOUnsatisfiedVote = ({ plotData, onVoteSubmit }) => {
       {showPrefOption && (
         <div>
           <label>
-            New Spec Pref:
+            Do you want to specify a weight?:
             <input
               type="radio"
               name="newspecPref"
@@ -100,7 +100,7 @@ const BOUnsatisfiedVote = ({ plotData, onVoteSubmit }) => {
       {showWeightOption && (
         <div>
           <label>
-            New Spec Weight:
+            Weight:
             <input type="range" min="0" max="10" value={newspecWt} onChange={handleWeightChange} />
             {newspecWt}
           </label>

@@ -5,7 +5,7 @@ import '../styles/InitialEvalVoting.css'; // Ensure the path matches your struct
 const PlotDisplay = ({ plotData }) => {
   return (
     <div className="evaluation-section">
-      <h2>Current Plot</h2>
+      <h2>Current plot</h2>
       <img src={`data:image/png;base64,${plotData.plot}`} alt="Current Plot" />
     </div>
   );

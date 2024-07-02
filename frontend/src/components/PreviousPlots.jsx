@@ -8,7 +8,7 @@ const PreviousPlots = ({ plotHistory }) => {
 
   return (
     <div className="evaluation-section">
-      <h2>Previous Plots</h2>
+      <h2>Previous plots</h2>
       {history.map((item, index) => (
         <div key={index}>
           <img src={`data:image/png;base64,${item.plot_data.plot}`} alt={`Plot ${index}`} style={{ width: '500px'}} />

@@ -80,7 +80,7 @@ const VoteInput = ({ onVoteSubmit, currentWcountGood }) => {
       {showPrefOption && (
         <div>
           <label>
-            New Spec Pref:
+            Do you want to specify a weight?:
             <input
               type="radio"
               name="newspecPref"
@@ -102,7 +102,7 @@ const VoteInput = ({ onVoteSubmit, currentWcountGood }) => {
       {showWeightOption && (
         <div>
           <label>
-            New Spec Weight:
+            Weight:
             <input type="range" min="0" max="10" value={newspecWt} onChange={handleWeightChange} />
             {newspecWt}
           </label>
