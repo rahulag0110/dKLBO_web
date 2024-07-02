@@ -25,10 +25,6 @@ const VotesPage = ({ plotHistory, trainY, onGoForBO }) => {
         {boStarting ? 'Starting BO...' : 'Start BO'}
       </button>
       <p className="votes-description">Here is the history of your votes and evaluated values.</p>
-      <div className="train-y-data">
-        <h2>Initial Evaluated Values</h2>
-        <ul>{flattenedTrainY}</ul>
-      </div>
       <h2>List of Initial User Votes</h2>
       <div className="plot-history">
         {history.map((item, index) => (
@@ -40,6 +36,10 @@ const VotesPage = ({ plotHistory, trainY, onGoForBO }) => {
             )}
           </div>
         ))}
+      </div>
+      <div className="train-y-data">
+        <h2>Initial Evaluated Values</h2>
+        <ul>{flattenedTrainY}</ul>
       </div>
     </div>
   );
