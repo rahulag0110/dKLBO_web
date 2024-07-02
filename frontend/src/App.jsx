@@ -1,5 +1,6 @@
 // src/App.jsx
 import React, { useState } from 'react';
+import DescriptionPage from './components/DescriptionPage';
 import FileNumStartUpload from './components/FileNumStartUpload';
 import EvaluationButton from './components/EvaluationButton';
 import PlotDisplay from './components/PlotDisplay';
@@ -17,6 +18,7 @@ import './styles/Global.css';
 
 const App = () => {
   // Initial Evaluation Checkpoint Variables
+  const [descriptionPageVisible, setDescriptionPageVisible] = useState(true);
   const [numStartSet, setNumStartSet] = useState(false);
   const [preprocessingDone, setPreprocessingDone] = useState(false);
   const [initialEvalStarted, setInitialEvalStarted] = useState(false);
@@ -56,6 +58,7 @@ const App = () => {
   const resetStates = async () => {
     try {
         await axios.post('http://localhost:8000/reset/');
+        setDescriptionPageVisible(true);
         setNumStartSet(false);
         setPreprocessingDone(false);
         setInitialEvalStarted(false);
@@ -389,7 +392,8 @@ const App = () => {
         <h1>BOARS: Bayesian Optimized Active Recommender System</h1>
         <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
       </header>
-      {!numStartSet && <FileNumStartUpload onUploadComplete={handleUploadComplete} initialResetStates={resetStates} />}
+      {descriptionPageVisible && <DescriptionPage onProceed={() => setDescriptionPageVisible(false)} />}
+      {!descriptionPageVisible && !numStartSet && <FileNumStartUpload onUploadComplete={handleUploadComplete} initialResetStates={resetStates} />}
       {preprocessingDone && !initialEvalStarted && <EvaluationButton startEvaluation={startEvaluation} />}
       {currentPlot && (
         <div>

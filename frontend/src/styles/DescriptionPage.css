@@ -1,0 +1,65 @@
+/* src/styles/DescriptionPage.css */
+
+.description-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 80%;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+.description-container h1 {
+    font-size: 2.5rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.description-text {
+    font-size: 1.2rem;
+    color: #333;
+    text-align: justify;
+    margin-bottom: 20px;
+}
+
+.description-image {
+    width: 80%;
+    max-width: 1000px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.github-link {
+    color: #007BFF;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.github-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.proceed-button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.proceed-button:hover {
+    background-color: #0056b3;
+}
