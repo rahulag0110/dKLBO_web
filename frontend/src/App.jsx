@@ -58,7 +58,6 @@ const App = () => {
   const resetStates = async () => {
     try {
         await axios.post('http://localhost:8000/reset/');
-        setDescriptionPageVisible(true);
         setNumStartSet(false);
         setPreprocessingDone(false);
         setInitialEvalStarted(false);
@@ -90,6 +89,11 @@ const App = () => {
     } catch (error) {
         console.error('Error resetting states:', error);
     }
+  };
+
+  const startAndReset = async () => {
+    setDescriptionPageVisible(false);
+    resetStates();
   };
 
   const handleUploadComplete = () => {
@@ -392,8 +396,8 @@ const App = () => {
         <h1>BOARS: Bayesian Optimized Active Recommender System</h1>
         <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
       </header>
-      {descriptionPageVisible && <DescriptionPage onProceed={() => setDescriptionPageVisible(false)} />}
-      {!descriptionPageVisible && !numStartSet && <FileNumStartUpload onUploadComplete={handleUploadComplete} initialResetStates={resetStates} />}
+      {descriptionPageVisible && <DescriptionPage onProceed={startAndReset} />}
+      {!descriptionPageVisible && !numStartSet && <FileNumStartUpload onUploadComplete={handleUploadComplete} />}
       {preprocessingDone && !initialEvalStarted && <EvaluationButton startEvaluation={startEvaluation} />}
       {currentPlot && (
         <div>

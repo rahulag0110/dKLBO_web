@@ -4,7 +4,7 @@ import axios from 'axios';
 import LoadingBar from './LoadingBar';
 import '../styles/FileNumStartUpload.css'
 
-const FileNumStartUpload = ({ onUploadComplete, initialResetStates }) => {
+const FileNumStartUpload = ({ onUploadComplete}) => {
     
     
 
@@ -13,9 +13,6 @@ const FileNumStartUpload = ({ onUploadComplete, initialResetStates }) => {
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState(0);
     const progressRef = useRef(progress);
-    const [resetDone, setResetDone] = useState(false);
-
-    {!resetDone && initialResetStates() && setResetDone(true);}
 
     const handleNumStartChange = (e) => {
         setNumStart(e.target.value);
