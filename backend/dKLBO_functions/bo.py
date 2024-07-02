@@ -528,7 +528,7 @@ def bo_loop_automated(bo_loop_counter, num_bo, test_X_norm, indices, img, test_X
 
             eval_spec_y[idx_x, idx_y, :] = new_spec_y
             # Evaluate true function for new data, augment data
-            train_X, train_X_norm, _, train_indices, train_Y, var_params, switch_obj_index, m, location_plot = augment_newdata_KL_satisfied(nextX, nextX_norm, next_indices, train_X, train_X_norm, train_indices, train_Y, new_spec_x, new_spec_y, eval_spec_y, img, var_params, switch_obj_index, m)
+            train_X, train_X_norm, _, train_indices, train_Y, var_params, switch_obj_index, m, location_plot = augment_newdata_KL_satisfied(nextX, nextX_norm, next_indices, train_X, train_X_norm, train_indices, train_Y, new_spec_x, new_spec_y, eval_spec_y, img, var_params, switch_obj_index, m, bo_loop_counter = i)
 
             location_plots.append(location_plot)
             gp_surro = optimize_dKLgp(train_X_norm, train_Y[:, 0])
@@ -575,7 +575,7 @@ def bo_finish(gp_surro, test_X_norm, train_indices, train_Y, indices, X_eval, X_
     }
 
 def augment_newdata_KL_satisfied(acq_X, acq_X_norm, acq_indices, train_X, train_X_norm, train_indices, train_Y,
-                           new_spec_x, new_spec_y, eval_spec, img_space, var_params, u, m):
+                           new_spec_x, new_spec_y, eval_spec, img_space, var_params, u, m, bo_loop_counter):
         
     #check_with_arpan
     eval_spec_y = eval_spec
@@ -629,6 +629,8 @@ def augment_newdata_KL_satisfied(acq_X, acq_X_norm, acq_indices, train_X, train_
     loc_ax[0].set_title(f'loc: {idx_y},{idx_x}', fontsize=20)
     loc_ax[1].plot(new_spec_x, target_func)
     loc_ax[1].set_title('Target function', fontsize = 20)
+    
+    loc_fig.suptitle(f'BO Iteration #{bo_loop_counter}', fontsize=20)
     
     location_plot_buffer = io.BytesIO()
     plt.savefig(location_plot_buffer, format='png')
