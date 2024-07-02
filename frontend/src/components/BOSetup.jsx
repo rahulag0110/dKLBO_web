@@ -30,7 +30,7 @@ const BOSetup = ({ onSetupComplete, onStartBOLoop }) => {
 
   return (
     <div className="bo-setup-container">
-      <p className="description">Description...</p>
+      {/* <p className="description">Description...</p> */}
       <form onSubmit={handleSubmit} className="bo-setup-form">
         <label>
           Number of BO iterations:
