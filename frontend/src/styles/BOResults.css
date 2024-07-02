@@ -30,9 +30,16 @@
     margin-bottom: 10px;
 }
 
-.plot-grid {
+.gp-plot-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); /* 2 columns per row */
+    gap: 20px;
+    width: 100%;
+}
+
+.location-plot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* 3 columns per row */
     gap: 20px;
     width: 100%;
 }
