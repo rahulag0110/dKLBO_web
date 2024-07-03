@@ -92,8 +92,13 @@ const App = () => {
   };
 
   const startAndReset = async () => {
-    setDescriptionPageVisible(false);
     resetStates();
+    setDescriptionPageVisible(false);
+  };
+
+  const endAndReset = async () => {
+    resetStates();
+    setDescriptionPageVisible(true);
   };
 
   const handleUploadComplete = () => {
@@ -274,7 +279,7 @@ const App = () => {
                 <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
             </header>
           </div>
-          <BOResults GPFigures={GPFigures} locationPlots={locationPlots} onReset={resetStates} />
+          <BOResults GPFigures={GPFigures} locationPlots={locationPlots} onReset={endAndReset} />
         </>
     )
   }

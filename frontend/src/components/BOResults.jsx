@@ -30,8 +30,8 @@ const BOResults = ({ GPFigures, locationPlots, onReset }) => {
           </div>
         ))}
       </div>
-      <h2>To reset and start again click the reset button below </h2>
       <button className="download-button" onClick={handleDownload}>Download Results</button>
+      <h2>To reset and start again click the reset button below </h2>
       <button className="reset-button" onClick={onReset}>Reset</button>
     </div>
   );
