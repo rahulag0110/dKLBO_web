@@ -274,7 +274,7 @@ const App = () => {
                 <p className="app-subtitle">A partial human interacted BO framework for autonomous experiments.</p>
             </header>
           </div>
-          <BOResults optimResults={optimResults} GPFigures={GPFigures} locationPlots={locationPlots} onReset={resetStates} />
+          <BOResults GPFigures={GPFigures} locationPlots={locationPlots} onReset={resetStates} />
         </>
     )
   }

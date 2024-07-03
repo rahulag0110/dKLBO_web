@@ -1,9 +1,14 @@
 import React from 'react';
 import '../styles/BOResults.css';
 
-const BOResults = ({ optimResults, GPFigures, locationPlots, onReset }) => {
+const BOResults = ({ GPFigures, locationPlots, onReset }) => {
   const validGPFigures = GPFigures.filter((figure) => figure !== null);
   const validLocationPlots = locationPlots.filter((plot) => plot !== null);
+
+  const handleDownload = () => {
+    // Trigger the download
+    window.location.href = 'http://localhost:8000/download_optim_results/';
+  };
 
   return (
     <div className="results-section">
@@ -27,6 +32,7 @@ const BOResults = ({ optimResults, GPFigures, locationPlots, onReset }) => {
       </div>
       <h2>To reset and start again click the reset button below </h2>
       <button className="reset-button" onClick={onReset}>Reset</button>
+      <button className="download-button" onClick={handleDownload}>Download Results</button>
     </div>
   );
 };
