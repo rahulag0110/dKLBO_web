@@ -1,6 +1,7 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from fastapi.responses import FileResponse
 
 import pickle
 
@@ -586,3 +587,10 @@ async def bo_finish_endpoint():
     optim_results_str = "OK"
      
     return {"status": "bo_loop_last_step success", "bo_loop_counter": parameters_state["bo_loop_counter"], "optim_results": "OK"}
+
+@app.get("/download_optim_results/")
+async def download_optim_results():
+    file_path = 'optim_results.npy'
+    response = FileResponse(file_path, media_type='application/octet-stream', filename='optim_results.npy')
+    
+    return response

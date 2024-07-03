@@ -561,6 +561,16 @@ def bo_finish(gp_surro, test_X_norm, train_indices, train_Y, indices, X_eval, X_
     user_votes = var_params[1]
     optim_results = [X_opt, X_opt_GP, user_votes, explored_data]
     
+    optim_results = {
+        'X_opt': X_opt,
+        'X_opt_GP': X_opt_GP,
+        'user_votes': user_votes,
+        'explored_data_train_indices': train_indices,
+        'explored_data_train_Y': train_Y,
+    }
+    
+    np.save('./optim_results.npy', optim_results)
+    
     return {
         "gp_opt": gp_opt,
         "y_pred_means": y_pred_means,
