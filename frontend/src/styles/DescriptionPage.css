@@ -31,6 +31,13 @@
     margin-bottom: 20px;
 }
 
+.reference-text {
+    font-size: 0.8rem;
+    color: #333;
+    text-align: justify;
+    margin-bottom: 20px;
+}
+
 .description-image {
     width: 80%;
     max-width: 1000px;
