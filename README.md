@@ -6,9 +6,6 @@
 
 [![Watch the demo](https://img.youtube.com/vi/rZJ5U_gELaA/maxresdefault.jpg)](https://youtu.be/rZJ5U_gELaA)
 
-<iframe width="560" height="315" src="https://youtu.be/rZJ5U_gELaA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-
 ## Problem Description
 
 Build a partial human-in-the-loop Bayesian Optimization (BO) framework.
